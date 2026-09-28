@@ -219,7 +219,7 @@ export const PRODUCTS: Product[] = [
     name: 'ASUS TUF Gaming F15 RTX 3050 Rig',
     brand: 'ASUS',
     category: 'laptops',
-    price: 59990,
+    price: 159990,
     originalPrice: 75990,
     rating: 4.9,
     reviewsCount: 29,

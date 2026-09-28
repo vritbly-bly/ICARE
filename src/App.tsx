@@ -28,15 +28,19 @@ export default function App() {
   // Global Live Search State
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Products State with LocalStorage Persistence
+  // Products State with LocalStorage Persistence & Live Default Sync
   const [products, setProducts] = useState<Product[]>(() => {
     try {
       const saved = localStorage.getItem('icare_custom_products');
       if (saved) {
         const parsed: Product[] = JSON.parse(saved);
-        // Combine saved with default catalog without duplicates
-        const defaultRemaining = PRODUCTS.filter((p) => !parsed.some((cp) => cp.id === p.id));
-        return [...parsed, ...defaultRemaining];
+        // Identify custom added products (custom-prod-) vs code-defined defaults
+        const customAdded = parsed.filter((cp) => cp.id.startsWith('custom-prod-'));
+        // For default products, ensure any edits made directly in code/catalog take effect
+        // while preserving any custom products added through the UI
+        const defaultIds = new Set(PRODUCTS.map((p) => p.id));
+        const customOverrides = parsed.filter((cp) => !cp.id.startsWith('custom-prod-') && !defaultIds.has(cp.id));
+        return [...customAdded, ...customOverrides, ...PRODUCTS];
       }
     } catch {
       // fallback
@@ -44,14 +48,16 @@ export default function App() {
     return PRODUCTS;
   });
 
-  // Services State with LocalStorage Persistence
+  // Services State with LocalStorage Persistence & Live Default Sync
   const [services, setServices] = useState<ServicePillar[]>(() => {
     try {
       const saved = localStorage.getItem('icare_custom_services');
       if (saved) {
         const parsed: ServicePillar[] = JSON.parse(saved);
-        const defaultRemaining = SERVICE_PILLARS.filter((s) => !parsed.some((sp) => sp.id === s.id));
-        return [...parsed, ...defaultRemaining];
+        const customAdded = parsed.filter((cs) => cs.id.startsWith('custom-serv-'));
+        const defaultIds = new Set(SERVICE_PILLARS.map((s) => s.id));
+        const customOverrides = parsed.filter((cs) => !cs.id.startsWith('custom-serv-') && !defaultIds.has(cs.id));
+        return [...customAdded, ...customOverrides, ...SERVICE_PILLARS];
       }
     } catch {
       // fallback
@@ -199,6 +205,17 @@ export default function App() {
 
     // Also remove from cart if present
     setCartItems((prev) => prev.filter((item) => item.product.id !== productId));
+  };
+
+  const handleResetCatalog = () => {
+    try {
+      localStorage.removeItem('icare_custom_products');
+      localStorage.removeItem('icare_custom_services');
+    } catch {
+      // ignore
+    }
+    setProducts(PRODUCTS);
+    setServices(SERVICE_PILLARS);
   };
 
   // SERVICE CRUD HANDLERS
@@ -355,6 +372,7 @@ export default function App() {
         onOpenAddService={handleOpenAddService}
         onOpenPaymentQr={() => setIsPaymentQrModalOpen(true)}
         onOpenEditLogo={() => handleOpenEditLogoModal('store')}
+        onResetCatalog={handleResetCatalog}
       />
 
       {/* 3-Zone Sticky Navigation with Global Search Bar & Payment QR */}

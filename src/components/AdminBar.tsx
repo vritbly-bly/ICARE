@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShieldCheck, Plus, QrCode, Upload, KeyRound, LogOut } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, Plus, QrCode, Upload, KeyRound, LogOut, RefreshCw, Check } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
 interface AdminBarProps {
@@ -7,6 +7,7 @@ interface AdminBarProps {
   onOpenAddService: () => void;
   onOpenPaymentQr: () => void;
   onOpenEditLogo: () => void;
+  onResetCatalog?: () => void;
 }
 
 export const AdminBar: React.FC<AdminBarProps> = ({
@@ -14,10 +15,20 @@ export const AdminBar: React.FC<AdminBarProps> = ({
   onOpenAddService,
   onOpenPaymentQr,
   onOpenEditLogo,
+  onResetCatalog,
 }) => {
   const { isAdmin, logout, openLoginModal } = useAdmin();
+  const [syncStatus, setSyncStatus] = useState<string | null>(null);
 
   if (!isAdmin) return null;
+
+  const handleSyncClick = () => {
+    if (onResetCatalog) {
+      onResetCatalog();
+      setSyncStatus('Synced!');
+      setTimeout(() => setSyncStatus(null), 2000);
+    }
+  };
 
   return (
     <aside
@@ -84,6 +95,30 @@ export const AdminBar: React.FC<AdminBarProps> = ({
             <KeyRound className="w-3.5 h-3.5 text-amber-400" />
             <span className="hidden lg:inline">Change PIN</span>
           </button>
+
+          {onResetCatalog && (
+            <button
+              onClick={handleSyncClick}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg font-semibold transition-colors cursor-pointer border ${
+                syncStatus
+                  ? 'bg-emerald-600 text-white border-emerald-500'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border-slate-700'
+              }`}
+              title="Sync catalog with latest default items from code"
+            >
+              {syncStatus ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-white" />
+                  <span>Synced!</span>
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="hidden sm:inline">Sync Latest Catalog</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Right: Logout Action */}
