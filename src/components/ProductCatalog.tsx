@@ -21,6 +21,7 @@ import {
   Images
 } from 'lucide-react';
 import { Product, CategoryType } from '../types';
+import { useAdmin } from '../context/AdminContext';
 
 interface ProductCatalogProps {
   products: Product[];
@@ -54,6 +55,7 @@ const CatalogProductCard: React.FC<{
   handleAdd,
   getProductIcon,
 }) => {
+  const { isAdmin } = useAdmin();
   const [activeImageIdx, setActiveImageIdx] = useState(0);
 
   // Extract all available images (from images array or imageUrl)
@@ -272,27 +274,31 @@ const CatalogProductCard: React.FC<{
               <Info className="w-3.5 h-3.5" />
             </button>
 
-            <button
-              onClick={() => onEditProduct(product)}
-              className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors cursor-pointer"
-              title="Edit Product Details & Images"
-              aria-label="Edit Product Details & Images"
-            >
-              <Edit3 className="w-3.5 h-3.5" />
-            </button>
+            {isAdmin && (
+              <>
+                <button
+                  onClick={() => onEditProduct(product)}
+                  className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors cursor-pointer"
+                  title="Edit Product Details & Images (Admin)"
+                  aria-label="Edit Product Details & Images"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                </button>
 
-            <button
-              onClick={() => {
-                if (window.confirm(`Are you sure you want to delete "${product.name}" from catalog?`)) {
-                  onDeleteProduct(product.id);
-                }
-              }}
-              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-              title="Delete Product"
-              aria-label="Delete Product"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
+                <button
+                  onClick={() => {
+                    if (window.confirm(`Are you sure you want to delete "${product.name}" from catalog?`)) {
+                      onDeleteProduct(product.id);
+                    }
+                  }}
+                  className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                  title="Delete Product (Admin)"
+                  aria-label="Delete Product"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </>
+            )}
 
             <button
               onClick={() => handleAdd(product)}
@@ -333,6 +339,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   searchQuery,
   onSearchChange,
 }) => {
+  const { isAdmin } = useAdmin();
   const [selectedBrand, setSelectedBrand] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'rating'>('featured');
   const [addedProductId, setAddedProductId] = useState<string | null>(null);
@@ -420,13 +427,15 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               <span>products</span>
             </div>
 
-            <button
-              onClick={onOpenAddProduct}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-sm shadow-sky-600/20 cursor-pointer whitespace-nowrap"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Product</span>
-            </button>
+            {isAdmin && (
+              <button
+                onClick={onOpenAddProduct}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-sm shadow-sky-600/20 cursor-pointer whitespace-nowrap"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Product</span>
+              </button>
+            )}
           </div>
         </div>
 

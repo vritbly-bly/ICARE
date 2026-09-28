@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { ServicePillar } from '../types';
 import { STORE_INFO } from '../data/mockData';
+import { useAdmin } from '../context/AdminContext';
 
 interface ServicesSectionProps {
   services: ServicePillar[];
@@ -47,6 +48,7 @@ const ServiceCardItem: React.FC<{
   onDeleteService,
   getPillarIcon,
 }) => {
+  const { isAdmin } = useAdmin();
   const [activeImageIdx, setActiveImageIdx] = useState(0);
 
   const pillarImages = useMemo(() => {
@@ -153,27 +155,31 @@ const ServiceCardItem: React.FC<{
                 {pillar.priceEstimate}
               </span>
 
-              <button
-                onClick={() => onEditService(pillar)}
-                className="p-1 text-slate-400 hover:text-sky-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
-                title="Edit Service Offering & Images"
-                aria-label="Edit Service Offering & Images"
-              >
-                <Edit3 className="w-3.5 h-3.5" />
-              </button>
+              {isAdmin && (
+                <>
+                  <button
+                    onClick={() => onEditService(pillar)}
+                    className="p-1 text-slate-400 hover:text-sky-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                    title="Edit Service Offering & Images (Admin)"
+                    aria-label="Edit Service Offering & Images"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
 
-              <button
-                onClick={() => {
-                  if (window.confirm(`Are you sure you want to delete service "${pillar.title}"?`)) {
-                    onDeleteService(pillar.id);
-                  }
-                }}
-                className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                title="Delete Service"
-                aria-label="Delete Service"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
+                  <button
+                    onClick={() => {
+                      if (window.confirm(`Are you sure you want to delete service "${pillar.title}"?`)) {
+                        onDeleteService(pillar.id);
+                      }
+                    }}
+                    className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                    title="Delete Service (Admin)"
+                    aria-label="Delete Service"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </>
+              )}
             </div>
           </div>
 
@@ -221,6 +227,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   onEditService,
   onDeleteService,
 }) => {
+  const { isAdmin } = useAdmin();
   // Repair Estimator State
   const [deviceType, setDeviceType] = useState<'laptop' | 'desktop' | 'printer' | 'cctv'>('laptop');
   const [issueType, setIssueType] = useState<string>('ssd_upgrade');
@@ -300,13 +307,15 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            <button
-              onClick={onOpenAddService}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-sm shadow-sky-600/20 cursor-pointer whitespace-nowrap"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Service Offering</span>
-            </button>
+            {isAdmin && (
+              <button
+                onClick={onOpenAddService}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-sm shadow-sky-600/20 cursor-pointer whitespace-nowrap"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Service Offering</span>
+              </button>
+            )}
           </div>
         </div>
 

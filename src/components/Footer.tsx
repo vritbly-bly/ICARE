@@ -1,7 +1,8 @@
 import React from 'react';
-import { Phone, Mail, MapPin, Globe, ArrowUp } from 'lucide-react';
+import { Phone, Mail, MapPin, Globe, ArrowUp, Lock, ShieldCheck } from 'lucide-react';
 import { STORE_INFO } from '../data/mockData';
 import { BrandLogo } from './BrandLogo';
+import { useAdmin } from '../context/AdminContext';
 
 interface FooterProps {
   onNavigate: (section: string) => void;
@@ -9,6 +10,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPaymentQr }) => {
+  const { isAdmin, openLoginModal } = useAdmin();
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -213,13 +215,32 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPaymentQr }) =
               <>
                 <button
                   onClick={onOpenPaymentQr}
-                  className="hover:text-sky-400 transition-colors text-slate-400"
+                  className="hover:text-sky-400 transition-colors text-slate-400 cursor-pointer"
                 >
                   Store Payment QR
                 </button>
                 <span aria-hidden="true">·</span>
               </>
             )}
+            <button
+              onClick={openLoginModal}
+              className={`flex items-center gap-1 transition-colors cursor-pointer ${
+                isAdmin ? 'text-emerald-400 hover:text-emerald-300 font-semibold' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {isAdmin ? (
+                <>
+                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  <span>Admin Mode (Owner)</span>
+                </>
+              ) : (
+                <>
+                  <Lock className="w-3 h-3" />
+                  <span>Admin Login</span>
+                </>
+              )}
+            </button>
+            <span aria-hidden="true">·</span>
             <button
               onClick={() => onNavigate('catalog')}
               className="hover:text-slate-300 transition-colors"

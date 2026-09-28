@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { X, QrCode, Upload, Copy, Check, AlertCircle, RefreshCw, Smartphone, Building, ShieldCheck } from 'lucide-react';
 import { PaymentConfig } from '../types';
 import { DEFAULT_PAYMENT_CONFIG } from '../data/mockData';
+import { useAdmin } from '../context/AdminContext';
 
 interface PaymentQrModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export const PaymentQrModal: React.FC<PaymentQrModalProps> = ({
   orderTotal,
   orderId,
 }) => {
+  const { isAdmin } = useAdmin();
   const [activeTab, setActiveTab] = useState<'view' | 'edit'>('view');
   const [upiId, setUpiId] = useState(paymentConfig.upiId);
   const [payeeName, setPayeeName] = useState(paymentConfig.payeeName);
@@ -165,17 +167,19 @@ export const PaymentQrModal: React.FC<PaymentQrModalProps> = ({
             >
               Scan &amp; Pay QR
             </button>
-            <button
-              onClick={() => setActiveTab('edit')}
-              className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
-                activeTab === 'edit'
-                  ? 'bg-sky-600 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-              }`}
-            >
-              <Upload className="w-3.5 h-3.5" />
-              <span>Upload / Change QR</span>
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => setActiveTab('edit')}
+                className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
+                  activeTab === 'edit'
+                    ? 'bg-sky-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                }`}
+              >
+                <Upload className="w-3.5 h-3.5" />
+                <span>Upload / Change QR (Admin)</span>
+              </button>
+            )}
           </div>
 
           {activeTab === 'edit' && (

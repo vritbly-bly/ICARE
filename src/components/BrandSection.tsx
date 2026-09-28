@@ -7,6 +7,7 @@ import {
   deleteBrandFromEcosystem 
 } from '../utils/brandManager';
 import { OfficialBrandLogo } from './OfficialBrandLogo';
+import { useAdmin } from '../context/AdminContext';
 
 interface BrandSectionProps {
   onSelectBrand?: (brandName: string) => void;
@@ -17,6 +18,7 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
   onSelectBrand,
   onOpenEditLogoModal 
 }) => {
+  const { isAdmin } = useAdmin();
   const [ecosystem, setEcosystem] = useState<BrandEcosystem>(getBrandEcosystem);
 
   useEffect(() => {
@@ -65,25 +67,27 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => onOpenEditLogoModal?.('brands')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
-              title="Add a new brand partner or upload logos"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>+ Add Brand Logo</span>
-            </button>
+          {isAdmin && (
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => onOpenEditLogoModal?.('brands')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-sky-600 hover:bg-sky-700 active:bg-sky-800 text-white rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
+                title="Add a new brand partner or upload logos (Admin)"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ Add Brand Logo</span>
+              </button>
 
-            <button
-              onClick={() => onOpenEditLogoModal?.('brands')}
-              className="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 rounded-xl text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer"
-              title="Upload, customize or delete logos"
-            >
-              <Upload className="w-3.5 h-3.5 text-sky-600" />
-              <span>Manage Logos</span>
-            </button>
-          </div>
+              <button
+                onClick={() => onOpenEditLogoModal?.('brands')}
+                className="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 rounded-xl text-xs font-bold shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+                title="Upload, customize or delete logos (Admin)"
+              >
+                <Upload className="w-3.5 h-3.5 text-sky-600" />
+                <span>Manage Logos</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 3 Categories of Brands (With Official Brand Logos, Add, Edit & Delete) */}
@@ -100,14 +104,16 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
                   <span className="text-[11px] text-slate-400 font-medium">
                     {ecosystem.laptops?.length || 0} Makes
                   </span>
-                  <button
-                    onClick={() => onOpenEditLogoModal?.('brands', undefined, 'laptops')}
-                    className="p-1 text-sky-600 hover:bg-sky-50 rounded-md transition-colors cursor-pointer"
-                    title="Add Laptop Brand"
-                    aria-label="Add Laptop Brand"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                  </button>
+                  {isAdmin && (
+                    <button
+                      onClick={() => onOpenEditLogoModal?.('brands', undefined, 'laptops')}
+                      className="p-1 text-sky-600 hover:bg-sky-50 rounded-md transition-colors cursor-pointer"
+                      title="Add Laptop Brand (Admin)"
+                      aria-label="Add Laptop Brand"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -125,44 +131,48 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
                       </div>
                     </button>
 
-                    {/* Action buttons on hover: Edit & Delete */}
-                    <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenEditLogoModal?.('brands', brand.name, 'laptops');
-                        }}
-                        className="p-1 bg-white/95 hover:bg-sky-50 text-slate-400 hover:text-sky-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
-                        title={`Upload / Edit ${brand.name} logo`}
-                        aria-label={`Edit ${brand.name} logo`}
-                      >
-                        <Edit3 className="w-2.5 h-2.5" />
-                      </button>
+                    {/* Action buttons on hover: Edit & Delete (Admin Only) */}
+                    {isAdmin && (
+                      <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenEditLogoModal?.('brands', brand.name, 'laptops');
+                          }}
+                          className="p-1 bg-white/95 hover:bg-sky-50 text-slate-400 hover:text-sky-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
+                          title={`Upload / Edit ${brand.name} logo`}
+                          aria-label={`Edit ${brand.name} logo`}
+                        >
+                          <Edit3 className="w-2.5 h-2.5" />
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={(e) => handleDeleteBrand('laptops', brand.name, e)}
-                        className="p-1 bg-white/95 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
-                        title={`Delete ${brand.name}`}
-                        aria-label={`Delete ${brand.name}`}
-                      >
-                        <Trash2 className="w-2.5 h-2.5" />
-                      </button>
-                    </div>
+                        <button
+                          type="button"
+                          onClick={(e) => handleDeleteBrand('laptops', brand.name, e)}
+                          className="p-1 bg-white/95 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
+                          title={`Delete ${brand.name}`}
+                          aria-label={`Delete ${brand.name}`}
+                        >
+                          <Trash2 className="w-2.5 h-2.5" />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
 
-                {/* Inline Add Brand Tile */}
-                <button
-                  type="button"
-                  onClick={() => onOpenEditLogoModal?.('brands', undefined, 'laptops')}
-                  className="p-2 border border-dashed border-slate-200 hover:border-sky-400 rounded-xl bg-slate-50/60 hover:bg-sky-50/40 transition-colors flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-sky-600 cursor-pointer h-14"
-                  title="Add another Laptop brand"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-bold">Add</span>
-                </button>
+                {/* Inline Add Brand Tile (Admin Only) */}
+                {isAdmin && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenEditLogoModal?.('brands', undefined, 'laptops')}
+                    className="p-2 border border-dashed border-slate-200 hover:border-sky-400 rounded-xl bg-slate-50/60 hover:bg-sky-50/40 transition-colors flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-sky-600 cursor-pointer h-14"
+                    title="Add another Laptop brand"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold">Add</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -183,14 +193,16 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
                   <span className="text-[11px] text-slate-400 font-medium">
                     {ecosystem.printers?.length || 0} Brands
                   </span>
-                  <button
-                    onClick={() => onOpenEditLogoModal?.('brands', undefined, 'printers')}
-                    className="p-1 text-blue-600 hover:bg-blue-50 rounded-md transition-colors cursor-pointer"
-                    title="Add Printer Brand"
-                    aria-label="Add Printer Brand"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                  </button>
+                  {isAdmin && (
+                    <button
+                      onClick={() => onOpenEditLogoModal?.('brands', undefined, 'printers')}
+                      className="p-1 text-blue-600 hover:bg-blue-50 rounded-md transition-colors cursor-pointer"
+                      title="Add Printer Brand (Admin)"
+                      aria-label="Add Printer Brand"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -208,42 +220,46 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
                       </div>
                     </button>
 
-                    <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenEditLogoModal?.('brands', brand.name, 'printers');
-                        }}
-                        className="p-1 bg-white/95 hover:bg-blue-50 text-slate-400 hover:text-blue-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
-                        title={`Upload / Edit ${brand.name} logo`}
-                        aria-label={`Edit ${brand.name} logo`}
-                      >
-                        <Edit3 className="w-2.5 h-2.5" />
-                      </button>
+                    {isAdmin && (
+                      <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenEditLogoModal?.('brands', brand.name, 'printers');
+                          }}
+                          className="p-1 bg-white/95 hover:bg-blue-50 text-slate-400 hover:text-blue-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
+                          title={`Upload / Edit ${brand.name} logo`}
+                          aria-label={`Edit ${brand.name} logo`}
+                        >
+                          <Edit3 className="w-2.5 h-2.5" />
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={(e) => handleDeleteBrand('printers', brand.name, e)}
-                        className="p-1 bg-white/95 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
-                        title={`Delete ${brand.name}`}
-                        aria-label={`Delete ${brand.name}`}
-                      >
-                        <Trash2 className="w-2.5 h-2.5" />
-                      </button>
-                    </div>
+                        <button
+                          type="button"
+                          onClick={(e) => handleDeleteBrand('printers', brand.name, e)}
+                          className="p-1 bg-white/95 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
+                          title={`Delete ${brand.name}`}
+                          aria-label={`Delete ${brand.name}`}
+                        >
+                          <Trash2 className="w-2.5 h-2.5" />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
 
-                <button
-                  type="button"
-                  onClick={() => onOpenEditLogoModal?.('brands', undefined, 'printers')}
-                  className="p-2 border border-dashed border-slate-200 hover:border-blue-400 rounded-xl bg-slate-50/60 hover:bg-blue-50/40 transition-colors flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-blue-600 cursor-pointer h-14"
-                  title="Add another Printer brand"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-bold">Add</span>
-                </button>
+                {isAdmin && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenEditLogoModal?.('brands', undefined, 'printers')}
+                    className="p-2 border border-dashed border-slate-200 hover:border-blue-400 rounded-xl bg-slate-50/60 hover:bg-blue-50/40 transition-colors flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-blue-600 cursor-pointer h-14"
+                    title="Add another Printer brand"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold">Add</span>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -264,14 +280,16 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
                   <span className="text-[11px] text-slate-400 font-medium">
                     {ecosystem.cctv?.length || 0} Partners
                   </span>
-                  <button
-                    onClick={() => onOpenEditLogoModal?.('brands', undefined, 'cctv')}
-                    className="p-1 text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
-                    title="Add CCTV Brand"
-                    aria-label="Add CCTV Brand"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                  </button>
+                  {isAdmin && (
+                    <button
+                      onClick={() => onOpenEditLogoModal?.('brands', undefined, 'cctv')}
+                      className="p-1 text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+                      title="Add CCTV Brand (Admin)"
+                      aria-label="Add CCTV Brand"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -289,42 +307,46 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
                       </div>
                     </button>
 
-                    <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenEditLogoModal?.('brands', brand.name, 'cctv');
-                        }}
-                        className="p-1 bg-white/95 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
-                        title={`Upload / Edit ${brand.name} logo`}
-                        aria-label={`Edit ${brand.name} logo`}
-                      >
-                        <Edit3 className="w-2.5 h-2.5" />
-                      </button>
+                    {isAdmin && (
+                      <div className="absolute top-1 right-1 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenEditLogoModal?.('brands', brand.name, 'cctv');
+                          }}
+                          className="p-1 bg-white/95 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
+                          title={`Upload / Edit ${brand.name} logo`}
+                          aria-label={`Edit ${brand.name} logo`}
+                        >
+                          <Edit3 className="w-2.5 h-2.5" />
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={(e) => handleDeleteBrand('cctv', brand.name, e)}
-                        className="p-1 bg-white/95 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
-                        title={`Delete ${brand.name}`}
-                        aria-label={`Delete ${brand.name}`}
-                      >
-                        <Trash2 className="w-2.5 h-2.5" />
-                      </button>
-                    </div>
+                        <button
+                          type="button"
+                          onClick={(e) => handleDeleteBrand('cctv', brand.name, e)}
+                          className="p-1 bg-white/95 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-md border border-slate-200 shadow-xs cursor-pointer"
+                          title={`Delete ${brand.name}`}
+                          aria-label={`Delete ${brand.name}`}
+                        >
+                          <Trash2 className="w-2.5 h-2.5" />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
 
-                <button
-                  type="button"
-                  onClick={() => onOpenEditLogoModal?.('brands', undefined, 'cctv')}
-                  className="p-2 border border-dashed border-slate-200 hover:border-rose-400 rounded-xl bg-slate-50/60 hover:bg-rose-50/40 transition-colors flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-rose-600 cursor-pointer h-14"
-                  title="Add another CCTV brand"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-bold">Add</span>
-                </button>
+                {isAdmin && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenEditLogoModal?.('brands', undefined, 'cctv')}
+                    className="p-2 border border-dashed border-slate-200 hover:border-rose-400 rounded-xl bg-slate-50/60 hover:bg-rose-50/40 transition-colors flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-rose-600 cursor-pointer h-14"
+                    title="Add another CCTV brand"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold">Add</span>
+                  </button>
+                )}
               </div>
             </div>
 

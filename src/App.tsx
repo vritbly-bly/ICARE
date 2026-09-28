@@ -16,10 +16,15 @@ import { AddServiceModal } from './components/AddServiceModal';
 import { PaymentQrModal } from './components/PaymentQrModal';
 import { HeaderBanner } from './components/HeaderBanner';
 import { EditLogoModal } from './components/EditLogoModal';
+import { AdminBar } from './components/AdminBar';
+import { AdminLoginModal } from './components/AdminLoginModal';
+import { useAdmin } from './context/AdminContext';
 import { Product, CartItem, Order, CategoryType, ServicePillar, PaymentConfig } from './types';
 import { PRODUCTS, SERVICE_PILLARS, DEFAULT_PAYMENT_CONFIG } from './data/mockData';
 
 export default function App() {
+  const { isAdmin, openLoginModal } = useAdmin();
+
   // Global Live Search State
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -106,6 +111,10 @@ export default function App() {
     brandName?: string, 
     category?: 'laptops' | 'printers' | 'cctv'
   ) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setEditLogoModalTab(tab);
     setEditLogoBrandName(brandName);
     setEditLogoCategory(category);
@@ -122,6 +131,10 @@ export default function App() {
 
   // PAYMENT QR SAVE HANDLER
   const handleSavePaymentConfig = (newConfig: PaymentConfig) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setPaymentConfig(newConfig);
     try {
       localStorage.setItem('icare_payment_config', JSON.stringify(newConfig));
@@ -132,16 +145,28 @@ export default function App() {
 
   // PRODUCT CRUD HANDLERS
   const handleOpenAddProduct = () => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setEditingProduct(null);
     setIsProductModalOpen(true);
   };
 
   const handleEditProduct = (product: Product) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setEditingProduct(product);
     setIsProductModalOpen(true);
   };
 
   const handleSaveProduct = (savedProduct: Product) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setProducts((prev) => {
       const exists = prev.some((p) => p.id === savedProduct.id);
       const updated = exists
@@ -158,6 +183,10 @@ export default function App() {
   };
 
   const handleDeleteProduct = (productId: string) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setProducts((prev) => {
       const updated = prev.filter((p) => p.id !== productId);
       try {
@@ -174,16 +203,28 @@ export default function App() {
 
   // SERVICE CRUD HANDLERS
   const handleOpenAddService = () => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setEditingService(null);
     setIsServiceModalOpen(true);
   };
 
   const handleEditService = (service: ServicePillar) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setEditingService(service);
     setIsServiceModalOpen(true);
   };
 
   const handleSaveService = (savedService: ServicePillar) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setServices((prev) => {
       const exists = prev.some((s) => s.id === savedService.id);
       const updated = exists
@@ -200,6 +241,10 @@ export default function App() {
   };
 
   const handleDeleteService = (serviceId: string) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
     setServices((prev) => {
       const updated = prev.filter((s) => s.id !== serviceId);
       try {
@@ -304,6 +349,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-sky-500 selection:text-white">
+      {/* Top Admin Quick Toolbar (Visible only when authenticated as Admin) */}
+      <AdminBar
+        onOpenAddProduct={handleOpenAddProduct}
+        onOpenAddService={handleOpenAddService}
+        onOpenPaymentQr={() => setIsPaymentQrModalOpen(true)}
+        onOpenEditLogo={() => handleOpenEditLogoModal('store')}
+      />
+
       {/* 3-Zone Sticky Navigation with Global Search Bar & Payment QR */}
       <Header
         cartCount={cartTotalCount}
@@ -451,6 +504,9 @@ export default function App() {
         initialBrandName={editLogoBrandName}
         initialCategory={editLogoCategory}
       />
+
+      {/* Admin Authentication & Passcode Modal */}
+      <AdminLoginModal />
     </div>
   );
 }
