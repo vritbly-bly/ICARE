@@ -7,9 +7,10 @@ import { useAdmin } from '../context/AdminContext';
 interface FooterProps {
   onNavigate: (section: string) => void;
   onOpenPaymentQr?: () => void;
+  onOpenDashboard?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPaymentQr }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPaymentQr, onOpenDashboard }) => {
   const { isAdmin, openLoginModal } = useAdmin();
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -218,6 +219,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPaymentQr }) =
                   className="hover:text-sky-400 transition-colors text-slate-400 cursor-pointer"
                 >
                   Store Payment QR
+                </button>
+                <span aria-hidden="true">·</span>
+              </>
+            )}
+            {isAdmin && onOpenDashboard && (
+              <>
+                <button
+                  onClick={onOpenDashboard}
+                  className="hover:text-sky-400 transition-colors text-sky-400 font-semibold cursor-pointer"
+                >
+                  Analytics Dashboard
                 </button>
                 <span aria-hidden="true">·</span>
               </>

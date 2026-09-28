@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Phone, MapPin, Menu, X, Search, QrCode, Upload, ShieldCheck, Lock } from 'lucide-react';
+import { ShoppingBag, Phone, MapPin, Menu, X, Search, QrCode, Upload, ShieldCheck, Lock, BarChart3 } from 'lucide-react';
 import { STORE_INFO } from '../data/mockData';
 import { BrandLogo } from './BrandLogo';
 import { useAdmin } from '../context/AdminContext';
@@ -14,6 +14,7 @@ interface HeaderProps {
   matchingCount?: number;
   onOpenPaymentQr?: () => void;
   onOpenEditLogoModal?: (tab?: 'store' | 'brands') => void;
+  onOpenDashboard?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -26,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
   matchingCount,
   onOpenPaymentQr,
   onOpenEditLogoModal,
+  onOpenDashboard,
 }) => {
   const { isAdmin, openLoginModal } = useAdmin();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -172,6 +174,19 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Zone 3: Primary Actions */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Admin Dashboard Button */}
+          {isAdmin && onOpenDashboard && (
+            <button
+              onClick={onOpenDashboard}
+              aria-label="Open Inventory Analytics Dashboard"
+              title="Open Inventory Analytics Dashboard"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-500 rounded-xl transition-all cursor-pointer shadow-xs"
+            >
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden md:inline">Dashboard</span>
+            </button>
+          )}
+
           {/* Payment QR Button */}
           {onOpenPaymentQr && (
             <button

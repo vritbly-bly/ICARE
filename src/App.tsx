@@ -19,6 +19,7 @@ import { EditLogoModal } from './components/EditLogoModal';
 import { AdminBar } from './components/AdminBar';
 import { AdminLoginModal } from './components/AdminLoginModal';
 import { ImportDataModal } from './components/ImportDataModal';
+import { DashboardModal } from './components/DashboardModal';
 import { useAdmin } from './context/AdminContext';
 import { Product, CartItem, Order, CategoryType, ServicePillar, PaymentConfig } from './types';
 import { PRODUCTS, SERVICE_PILLARS, DEFAULT_PAYMENT_CONFIG, CATALOG_DEFAULT_VERSION } from './data/mockData';
@@ -115,6 +116,17 @@ export default function App() {
   const [editLogoModalTab, setEditLogoModalTab] = useState<'store' | 'brands'>('store');
   const [editLogoBrandName, setEditLogoBrandName] = useState<string | undefined>(undefined);
   const [editLogoCategory, setEditLogoCategory] = useState<'laptops' | 'printers' | 'cctv' | undefined>(undefined);
+
+  // Inventory Dashboard Modal State
+  const [isDashboardModalOpen, setIsDashboardModalOpen] = useState(false);
+
+  const handleOpenDashboard = () => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
+    setIsDashboardModalOpen(true);
+  };
 
   const handleOpenEditLogoModal = (
     tab: 'store' | 'brands' = 'store', 
@@ -609,6 +621,7 @@ export default function App() {
         onOpenEditLogo={() => handleOpenEditLogoModal('store')}
         onResetCatalog={handleResetCatalog}
         onOpenImportData={() => setIsImportDataModalOpen(true)}
+        onOpenDashboard={handleOpenDashboard}
       />
 
       {/* 3-Zone Sticky Navigation with Global Search Bar & Payment QR */}
@@ -622,6 +635,7 @@ export default function App() {
         matchingCount={searchQuery ? matchingProductsCount : undefined}
         onOpenPaymentQr={() => setIsPaymentQrModalOpen(true)}
         onOpenEditLogoModal={handleOpenEditLogoModal}
+        onOpenDashboard={handleOpenDashboard}
       />
 
       {/* Main Content Area */}
@@ -679,6 +693,7 @@ export default function App() {
       <Footer
         onNavigate={scrollToSection}
         onOpenPaymentQr={() => setIsPaymentQrModalOpen(true)}
+        onOpenDashboard={handleOpenDashboard}
       />
 
       {/* Floating Customer Support Chat Widget */}
@@ -767,6 +782,17 @@ export default function App() {
         currentProducts={products}
         currentServices={services}
         onImportBannerLogo={handleImportBannerLogo}
+      />
+
+      {/* Admin Visual Inventory & Analytics Dashboard (Recharts) */}
+      <DashboardModal
+        isOpen={isDashboardModalOpen}
+        onClose={() => setIsDashboardModalOpen(false)}
+        products={products}
+        services={services}
+        onSelectCategory={handleCategorySelect}
+        onOpenAddProduct={handleOpenAddProduct}
+        onOpenAddService={handleOpenAddService}
       />
 
       {/* Admin Authentication & Passcode Modal */}

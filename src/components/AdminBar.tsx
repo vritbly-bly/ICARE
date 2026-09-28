@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Plus, QrCode, Upload, KeyRound, LogOut, RefreshCw, Check, Database, Globe } from 'lucide-react';
+import { ShieldCheck, Plus, QrCode, Upload, KeyRound, LogOut, RefreshCw, Check, Database, Globe, BarChart3 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
 interface AdminBarProps {
@@ -9,6 +9,7 @@ interface AdminBarProps {
   onOpenEditLogo: () => void;
   onResetCatalog?: () => void;
   onOpenImportData?: () => void;
+  onOpenDashboard?: () => void;
 }
 
 export const AdminBar: React.FC<AdminBarProps> = ({
@@ -18,6 +19,7 @@ export const AdminBar: React.FC<AdminBarProps> = ({
   onOpenEditLogo,
   onResetCatalog,
   onOpenImportData,
+  onOpenDashboard,
 }) => {
   const { isAdmin, logout, openLoginModal } = useAdmin();
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
@@ -53,9 +55,20 @@ export const AdminBar: React.FC<AdminBarProps> = ({
 
         {/* Center: Admin Quick Actions */}
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          {onOpenDashboard && (
+            <button
+              onClick={onOpenDashboard}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-colors cursor-pointer shadow-xs"
+              title="Open Inventory Analytics Dashboard"
+            >
+              <BarChart3 className="w-3.5 h-3.5" />
+              <span>Dashboard</span>
+            </button>
+          )}
+
           <button
             onClick={onOpenAddProduct}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-colors cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 font-semibold transition-colors cursor-pointer"
             title="Add a new product to catalog"
           >
             <Plus className="w-3.5 h-3.5" />
