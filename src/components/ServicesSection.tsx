@@ -50,6 +50,7 @@ const ServiceCardItem: React.FC<{
 }) => {
   const { isAdmin } = useAdmin();
   const [activeImageIdx, setActiveImageIdx] = useState(0);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const pillarImages = useMemo(() => {
     if (pillar.images && pillar.images.length > 0) {
@@ -158,7 +159,11 @@ const ServiceCardItem: React.FC<{
               {isAdmin && (
                 <>
                   <button
-                    onClick={() => onEditService(pillar)}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEditService(pillar);
+                    }}
                     className="p-1 text-slate-400 hover:text-sky-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                     title="Edit Service Offering & Images (Admin)"
                     aria-label="Edit Service Offering & Images"
@@ -166,18 +171,46 @@ const ServiceCardItem: React.FC<{
                     <Edit3 className="w-3.5 h-3.5" />
                   </button>
 
-                  <button
-                    onClick={() => {
-                      if (window.confirm(`Are you sure you want to delete service "${pillar.title}"?`)) {
-                        onDeleteService(pillar.id);
-                      }
-                    }}
-                    className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                    title="Delete Service (Admin)"
-                    aria-label="Delete Service"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  {confirmDelete ? (
+                    <div className="flex items-center gap-1 bg-red-50 border border-red-200 rounded-lg p-0.5 animate-in fade-in duration-150">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteService(pillar.id);
+                          setConfirmDelete(false);
+                        }}
+                        className="px-2 py-0.5 text-[11px] font-bold bg-red-600 text-white rounded hover:bg-red-700 transition-colors cursor-pointer"
+                        title="Confirm Delete"
+                      >
+                        Delete
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfirmDelete(false);
+                        }}
+                        className="px-1.5 py-0.5 text-[11px] text-slate-600 hover:text-slate-900 cursor-pointer"
+                        title="Cancel"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmDelete(true);
+                      }}
+                      className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                      title="Delete Service (Admin)"
+                      aria-label="Delete Service"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </>
               )}
             </div>

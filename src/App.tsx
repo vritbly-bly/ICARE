@@ -18,6 +18,7 @@ import { HeaderBanner } from './components/HeaderBanner';
 import { EditLogoModal } from './components/EditLogoModal';
 import { AdminBar } from './components/AdminBar';
 import { AdminLoginModal } from './components/AdminLoginModal';
+import { ImportDataModal } from './components/ImportDataModal';
 import { useAdmin } from './context/AdminContext';
 import { Product, CartItem, Order, CategoryType, ServicePillar, PaymentConfig } from './types';
 import { PRODUCTS, SERVICE_PILLARS, DEFAULT_PAYMENT_CONFIG } from './data/mockData';
@@ -34,13 +35,9 @@ export default function App() {
       const saved = localStorage.getItem('icare_custom_products');
       if (saved) {
         const parsed: Product[] = JSON.parse(saved);
-        // Identify custom added products (custom-prod-) vs code-defined defaults
-        const customAdded = parsed.filter((cp) => cp.id.startsWith('custom-prod-'));
-        // For default products, ensure any edits made directly in code/catalog take effect
-        // while preserving any custom products added through the UI
-        const defaultIds = new Set(PRODUCTS.map((p) => p.id));
-        const customOverrides = parsed.filter((cp) => !cp.id.startsWith('custom-prod-') && !defaultIds.has(cp.id));
-        return [...customAdded, ...customOverrides, ...PRODUCTS];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
       }
     } catch {
       // fallback
@@ -54,10 +51,9 @@ export default function App() {
       const saved = localStorage.getItem('icare_custom_services');
       if (saved) {
         const parsed: ServicePillar[] = JSON.parse(saved);
-        const customAdded = parsed.filter((cs) => cs.id.startsWith('custom-serv-'));
-        const defaultIds = new Set(SERVICE_PILLARS.map((s) => s.id));
-        const customOverrides = parsed.filter((cs) => !cs.id.startsWith('custom-serv-') && !defaultIds.has(cs.id));
-        return [...customAdded, ...customOverrides, ...SERVICE_PILLARS];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
       }
     } catch {
       // fallback
@@ -86,6 +82,7 @@ export default function App() {
 
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [editingService, setEditingService] = useState<ServicePillar | null>(null);
+  const [isImportDataModalOpen, setIsImportDataModalOpen] = useState(false);
 
   // Cart & Order State
   const [cartItems, setCartItems] = useState<CartItem[]>([
@@ -216,6 +213,73 @@ export default function App() {
     }
     setProducts(PRODUCTS);
     setServices(SERVICE_PILLARS);
+  };
+
+  // IMPORT DATA HANDLER (Link or File)
+  const handleImportData = (
+    importedProducts: Product[],
+    importedServices: ServicePillar[],
+    replaceExisting: boolean
+  ) => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
+
+    if (importedProducts.length > 0) {
+      setProducts((prev) => {
+        let updated: Product[];
+        if (replaceExisting) {
+          updated = importedProducts;
+        } else {
+          // Merge: replace items with matching id or name, append rest
+          const merged = [...prev];
+          importedProducts.forEach((imp) => {
+            const idx = merged.findIndex((p) => p.id === imp.id || p.name.toLowerCase() === imp.name.toLowerCase());
+            if (idx >= 0) {
+              merged[idx] = imp;
+            } else {
+              merged.unshift(imp);
+            }
+          });
+          updated = merged;
+        }
+
+        try {
+          localStorage.setItem('icare_custom_products', JSON.stringify(updated));
+        } catch {
+          // ignore
+        }
+        return updated;
+      });
+    }
+
+    if (importedServices.length > 0) {
+      setServices((prev) => {
+        let updated: ServicePillar[];
+        if (replaceExisting) {
+          updated = importedServices;
+        } else {
+          const merged = [...prev];
+          importedServices.forEach((imp) => {
+            const idx = merged.findIndex((s) => s.id === imp.id || s.title.toLowerCase() === imp.title.toLowerCase());
+            if (idx >= 0) {
+              merged[idx] = imp;
+            } else {
+              merged.push(imp);
+            }
+          });
+          updated = merged;
+        }
+
+        try {
+          localStorage.setItem('icare_custom_services', JSON.stringify(updated));
+        } catch {
+          // ignore
+        }
+        return updated;
+      });
+    }
   };
 
   // SERVICE CRUD HANDLERS
@@ -373,6 +437,7 @@ export default function App() {
         onOpenPaymentQr={() => setIsPaymentQrModalOpen(true)}
         onOpenEditLogo={() => handleOpenEditLogoModal('store')}
         onResetCatalog={handleResetCatalog}
+        onOpenImportData={() => setIsImportDataModalOpen(true)}
       />
 
       {/* 3-Zone Sticky Navigation with Global Search Bar & Payment QR */}
@@ -521,6 +586,15 @@ export default function App() {
         initialTab={editLogoModalTab}
         initialBrandName={editLogoBrandName}
         initialCategory={editLogoCategory}
+      />
+
+      {/* Import Data Modal (Link Auto-Fill, JSON File Upload, and Backup Export) */}
+      <ImportDataModal
+        isOpen={isImportDataModalOpen}
+        onClose={() => setIsImportDataModalOpen(false)}
+        onImportData={handleImportData}
+        currentProducts={products}
+        currentServices={services}
       />
 
       {/* Admin Authentication & Passcode Modal */}

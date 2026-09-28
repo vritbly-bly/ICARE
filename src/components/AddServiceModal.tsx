@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Upload, Plus, Trash2, Check, AlertCircle, Wrench, Cpu, Camera, Headphones, ShoppingCart, Network, Shield, HardDrive, Zap, Database, Edit3, Star } from 'lucide-react';
+import { X, Upload, Plus, Trash2, Check, AlertCircle, Wrench, Cpu, Camera, Headphones, ShoppingCart, Network, Shield, HardDrive, Zap, Database, Edit3, Star, Sparkles, Loader2, Link } from 'lucide-react';
 import { ServicePillar } from '../types';
 
 interface AddServiceModalProps {
@@ -27,6 +27,11 @@ export const AddServiceModal: React.FC<AddServiceModalProps> = ({
   ]);
   const [newFeatureText, setNewFeatureText] = useState('');
   
+  // Link auto-fill state
+  const [autofillUrl, setAutofillUrl] = useState('');
+  const [isAutofilling, setIsAutofilling] = useState(false);
+  const [autofillSuccess, setAutofillSuccess] = useState<string | null>(null);
+
   // Multi-image state
   const [images, setImages] = useState<string[]>([]);
   const [urlInput, setUrlInput] = useState('');
@@ -100,6 +105,79 @@ export const AddServiceModal: React.FC<AddServiceModalProps> = ({
         }
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAutoFillFromUrl = async () => {
+    if (!autofillUrl.trim()) {
+      setError('Please enter a service link or JSON URL to auto-fill.');
+      return;
+    }
+    setError(null);
+    setAutofillSuccess(null);
+    setIsAutofilling(true);
+
+    try {
+      const trimmed = autofillUrl.trim();
+      let response: Response;
+      try {
+        response = await fetch(trimmed, {
+          headers: { Accept: 'application/json, text/html, */*' },
+        });
+      } catch {
+        const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(trimmed)}`;
+        response = await fetch(proxy);
+      }
+
+      if (!response.ok) {
+        throw new Error(`Server returned status: ${response.status}`);
+      }
+
+      const text = await response.text();
+
+      try {
+        const parsed = JSON.parse(text);
+        const item = Array.isArray(parsed) ? parsed[0] : (parsed.services ? parsed.services[0] : parsed);
+        if (item) {
+          if (item.title || item.name) setTitle(item.title || item.name);
+          if (item.subtitle) setSubtitle(item.subtitle);
+          if (item.description) setDescription(item.description);
+          if (item.priceEstimate) setPriceEstimate(item.priceEstimate);
+          if (item.color) setSelectedColor(item.color);
+          if (item.icon) setSelectedIcon(item.icon);
+
+          let newImgs: string[] = [];
+          if (Array.isArray(item.images)) newImgs = item.images.filter(Boolean);
+          else if (item.imageUrl) newImgs = [item.imageUrl];
+
+          if (newImgs.length > 0) setImages((prev) => [...prev, ...newImgs]);
+          if (Array.isArray(item.features) && item.features.length > 0) {
+            setFeatures(item.features);
+          }
+
+          setAutofillSuccess('Service information and photos auto-filled!');
+          return;
+        }
+      } catch {
+        const doc = new DOMParser().parseFromString(text, 'text/html');
+        const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || doc.title;
+        const ogImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content');
+        const ogDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute('content');
+
+        if (ogTitle) setTitle(ogTitle.split('|')[0].trim());
+        if (ogDesc) setDescription(ogDesc);
+        if (ogImage) setImages((prev) => [...prev, ogImage]);
+
+        if (ogTitle || ogImage) {
+          setAutofillSuccess(`Auto-filled service details from web page!`);
+        } else {
+          throw new Error('Could not auto-extract service info from link.');
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to auto-fill service details from link.');
+    } finally {
+      setIsAutofilling(false);
     }
   };
 
@@ -232,6 +310,56 @@ export const AddServiceModal: React.FC<AddServiceModalProps> = ({
               <span>{error}</span>
             </div>
           )}
+
+          {autofillSuccess && (
+            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center gap-2">
+              <Check className="w-4 h-4 shrink-0 text-emerald-600" />
+              <span>{autofillSuccess}</span>
+            </div>
+          )}
+
+          {/* Quick Auto-Fill via Link */}
+          <div className="p-4 bg-gradient-to-r from-sky-50 to-indigo-50/60 rounded-2xl border border-sky-100 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-900">
+                <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+                <span>Auto-Fill from Service Link or URL</span>
+              </div>
+              <span className="text-[10px] text-sky-700 font-semibold bg-sky-200/60 px-2 py-0.5 rounded-full">
+                Fast Setup
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-600">
+              Paste a URL to auto-populate service details, diagnostic pricing, features, and lab photos.
+            </p>
+            <div className="flex gap-2 pt-1">
+              <input
+                type="url"
+                value={autofillUrl}
+                onChange={(e) => setAutofillUrl(e.target.value)}
+                placeholder="https://example.com/service-page or JSON URL..."
+                className="flex-1 px-3 py-1.5 text-xs bg-white border border-sky-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
+              />
+              <button
+                type="button"
+                onClick={handleAutoFillFromUrl}
+                disabled={isAutofilling}
+                className="px-3.5 py-1.5 bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shadow-2xs"
+              >
+                {isAutofilling ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Auto-filling...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Auto-Fill Info</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
 
           {/* Multiple Service Images Section (4:3 Size, Fit to Frame, Add/Edit/Delete) */}
           <div className="space-y-3 p-4 bg-slate-50/80 rounded-2xl border border-slate-200/90">

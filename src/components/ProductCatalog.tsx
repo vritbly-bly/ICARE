@@ -57,6 +57,7 @@ const CatalogProductCard: React.FC<{
 }) => {
   const { isAdmin } = useAdmin();
   const [activeImageIdx, setActiveImageIdx] = useState(0);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   // Extract all available images (from images array or imageUrl)
   const productImages = useMemo(() => {
@@ -277,7 +278,11 @@ const CatalogProductCard: React.FC<{
             {isAdmin && (
               <>
                 <button
-                  onClick={() => onEditProduct(product)}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditProduct(product);
+                  }}
                   className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors cursor-pointer"
                   title="Edit Product Details & Images (Admin)"
                   aria-label="Edit Product Details & Images"
@@ -285,18 +290,46 @@ const CatalogProductCard: React.FC<{
                   <Edit3 className="w-3.5 h-3.5" />
                 </button>
 
-                <button
-                  onClick={() => {
-                    if (window.confirm(`Are you sure you want to delete "${product.name}" from catalog?`)) {
-                      onDeleteProduct(product.id);
-                    }
-                  }}
-                  className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                  title="Delete Product (Admin)"
-                  aria-label="Delete Product"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                {confirmDelete ? (
+                  <div className="flex items-center gap-1 bg-red-50 border border-red-200 rounded-lg p-0.5 animate-in fade-in duration-150">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteProduct(product.id);
+                        setConfirmDelete(false);
+                      }}
+                      className="px-2 py-0.5 text-[11px] font-bold bg-red-600 text-white rounded hover:bg-red-700 transition-colors cursor-pointer"
+                      title="Confirm Delete"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmDelete(false);
+                      }}
+                      className="px-1.5 py-0.5 text-[11px] text-slate-600 hover:text-slate-900 cursor-pointer"
+                      title="Cancel"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setConfirmDelete(true);
+                    }}
+                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                    title="Delete Product (Admin)"
+                    aria-label="Delete Product"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </>
             )}
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Plus, QrCode, Upload, KeyRound, LogOut, RefreshCw, Check } from 'lucide-react';
+import { ShieldCheck, Plus, QrCode, Upload, KeyRound, LogOut, RefreshCw, Check, Database, Globe } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
 interface AdminBarProps {
@@ -8,6 +8,7 @@ interface AdminBarProps {
   onOpenPaymentQr: () => void;
   onOpenEditLogo: () => void;
   onResetCatalog?: () => void;
+  onOpenImportData?: () => void;
 }
 
 export const AdminBar: React.FC<AdminBarProps> = ({
@@ -16,6 +17,7 @@ export const AdminBar: React.FC<AdminBarProps> = ({
   onOpenPaymentQr,
   onOpenEditLogo,
   onResetCatalog,
+  onOpenImportData,
 }) => {
   const { isAdmin, logout, openLoginModal } = useAdmin();
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
@@ -95,6 +97,17 @@ export const AdminBar: React.FC<AdminBarProps> = ({
             <KeyRound className="w-3.5 h-3.5 text-amber-400" />
             <span className="hidden lg:inline">Change PIN</span>
           </button>
+
+          {onOpenImportData && (
+            <button
+              onClick={onOpenImportData}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 hover:text-white border border-indigo-700/60 font-semibold transition-colors cursor-pointer"
+              title="Import products/services via web link or JSON file (Auto-fill)"
+            >
+              <Globe className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Import Data</span>
+            </button>
+          )}
 
           {onResetCatalog && (
             <button

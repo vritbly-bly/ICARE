@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Upload, Plus, Trash2, Check, AlertCircle, Edit3, Image as ImageIcon, Star, Layers } from 'lucide-react';
+import { X, Upload, Plus, Trash2, Check, AlertCircle, Edit3, Image as ImageIcon, Star, Layers, Sparkles, Loader2, Link } from 'lucide-react';
 import { Product, CategoryType } from '../types';
 
 interface AddProductModalProps {
@@ -24,6 +24,11 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
   const [badge, setBadge] = useState('New Arrival');
   const [warranty, setWarranty] = useState('1 Year Official Brand Warranty');
   
+  // Link auto-fill state
+  const [autofillUrl, setAutofillUrl] = useState('');
+  const [isAutofilling, setIsAutofilling] = useState(false);
+  const [autofillSuccess, setAutofillSuccess] = useState<string | null>(null);
+
   // Multi-image state
   const [images, setImages] = useState<string[]>([]);
   const [urlInput, setUrlInput] = useState('');
@@ -121,6 +126,129 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
         }
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAutoFillFromUrl = async () => {
+    if (!autofillUrl.trim()) {
+      setError('Please enter a product web link or JSON URL to auto-fill.');
+      return;
+    }
+    setError(null);
+    setAutofillSuccess(null);
+    setIsAutofilling(true);
+
+    try {
+      const trimmed = autofillUrl.trim();
+      let response: Response;
+      try {
+        response = await fetch(trimmed, {
+          headers: { Accept: 'application/json, text/html, */*' },
+        });
+      } catch {
+        const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(trimmed)}`;
+        response = await fetch(proxy);
+      }
+
+      if (!response.ok) {
+        throw new Error(`Server returned status: ${response.status}`);
+      }
+
+      const text = await response.text();
+
+      // Check if text is JSON
+      try {
+        const parsed = JSON.parse(text);
+        const item = Array.isArray(parsed) ? parsed[0] : (parsed.products ? parsed.products[0] : parsed);
+        if (item) {
+          if (item.name || item.title) setName(item.name || item.title);
+          if (item.brand) setBrand(item.brand);
+          if (item.category && ['laptops', 'desktops', 'printers', 'cctv', 'accessories', 'amc'].includes(item.category)) {
+            setCategory(item.category);
+          }
+          if (item.price) setPrice(item.price.toString());
+          if (item.originalPrice) setOriginalPrice(item.originalPrice.toString());
+          if (item.description) setDescription(item.description);
+          if (item.warranty) setWarranty(item.warranty);
+          if (item.badge) setBadge(item.badge);
+
+          let newImgs: string[] = [];
+          if (Array.isArray(item.images)) newImgs = item.images.filter(Boolean);
+          else if (item.imageUrl) newImgs = [item.imageUrl];
+          else if (item.image) newImgs = [item.image];
+
+          if (newImgs.length > 0) {
+            setImages((prev) => [...prev, ...newImgs]);
+          }
+
+          if (item.specs && typeof item.specs === 'object') {
+            const specRows = Object.entries(item.specs).map(([key, value]) => ({
+              key,
+              value: String(value),
+            }));
+            if (specRows.length > 0) setSpecsList(specRows);
+          }
+
+          setAutofillSuccess('Product details, specifications, and photos auto-filled!');
+          return;
+        }
+      } catch {
+        // Fallback to HTML OpenGraph / JSON-LD extraction
+        const doc = new DOMParser().parseFromString(text, 'text/html');
+
+        let foundName = '';
+        let foundPrice = '';
+        let foundDesc = '';
+        let foundImgs: string[] = [];
+        let foundBrand = '';
+
+        // 1. JSON-LD scripts
+        const jsonLdScripts = doc.querySelectorAll('script[type="application/ld+json"]');
+        jsonLdScripts.forEach((s) => {
+          try {
+            const ld = JSON.parse(s.textContent || '{}');
+            if (ld['@type'] === 'Product' || ld.name) {
+              foundName = ld.name || foundName;
+              foundDesc = ld.description || foundDesc;
+              foundBrand = ld.brand?.name || ld.brand || foundBrand;
+              if (ld.offers?.price) foundPrice = String(ld.offers.price);
+              if (ld.image) {
+                if (Array.isArray(ld.image)) foundImgs.push(...ld.image);
+                else foundImgs.push(ld.image);
+              }
+            }
+          } catch {
+            // ignore
+          }
+        });
+
+        // 2. OpenGraph Fallback
+        const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || doc.title;
+        const ogImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content');
+        const ogDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute('content');
+
+        if (ogTitle && !foundName) foundName = ogTitle.split('|')[0].split('-')[0].trim();
+        if (ogImage && foundImgs.length === 0) foundImgs.push(ogImage);
+        if (ogDesc && !foundDesc) foundDesc = ogDesc;
+
+        if (foundName) setName(foundName);
+        if (foundPrice) setPrice(foundPrice);
+        if (foundDesc) setDescription(foundDesc);
+        if (foundBrand) setBrand(foundBrand);
+        if (foundImgs.length > 0) {
+          setImages((prev) => [...prev, ...foundImgs.filter(Boolean)]);
+        }
+
+        if (foundName || foundImgs.length > 0) {
+          setAutofillSuccess(`Auto-filled: "${foundName || 'Product'}" with ${foundImgs.length} photo(s)!`);
+        } else {
+          throw new Error('Could not auto-detect product specifications from this page. Try direct image link or manual entry.');
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to auto-fill from this URL. Please verify the link or enter details manually.');
+    } finally {
+      setIsAutofilling(false);
     }
   };
 
@@ -266,6 +394,56 @@ export const AddProductModal: React.FC<AddProductModalProps> = ({
               <span>{error}</span>
             </div>
           )}
+
+          {autofillSuccess && (
+            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center gap-2">
+              <Check className="w-4 h-4 shrink-0 text-emerald-600" />
+              <span>{autofillSuccess}</span>
+            </div>
+          )}
+
+          {/* Quick Auto-Fill via Link */}
+          <div className="p-4 bg-gradient-to-r from-sky-50 to-indigo-50/60 rounded-2xl border border-sky-100 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-900">
+                <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+                <span>Auto-Fill from Product Link or URL</span>
+              </div>
+              <span className="text-[10px] text-sky-700 font-semibold bg-sky-200/60 px-2 py-0.5 rounded-full">
+                Fast Setup
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-600">
+              Paste any product web link, manufacturer page, or JSON URL to auto-populate title, high-res photos, specs, and prices instantly.
+            </p>
+            <div className="flex gap-2 pt-1">
+              <input
+                type="url"
+                value={autofillUrl}
+                onChange={(e) => setAutofillUrl(e.target.value)}
+                placeholder="https://example.com/product-specs-page or image link..."
+                className="flex-1 px-3 py-1.5 text-xs bg-white border border-sky-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
+              />
+              <button
+                type="button"
+                onClick={handleAutoFillFromUrl}
+                disabled={isAutofilling}
+                className="px-3.5 py-1.5 bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap shadow-2xs"
+              >
+                {isAutofilling ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Auto-filling...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Auto-Fill Info</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
 
           {/* Multiple Product Images Section (4:3 Size, Fit to Frame, Add/Edit/Delete) */}
           <div className="space-y-3 p-4 bg-slate-50/80 rounded-2xl border border-slate-200/90">
