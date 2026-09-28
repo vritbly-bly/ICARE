@@ -16,10 +16,12 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
   const { isAdmin } = useAdmin();
   const [customBannerImage, setCustomBannerImage] = useState<string | null>(() => {
     try {
-      return localStorage.getItem('icare_custom_banner_image');
+      const stored = localStorage.getItem('icare_custom_banner_image');
+      if (stored) return stored;
     } catch {
-      return null;
+      // ignore
     }
+    return STORE_INFO.defaultBannerUrl || null;
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -115,6 +117,10 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
                 alt="iCare Computers Official Header Banner"
                 className="w-full h-full object-contain md:object-cover object-center select-none"
                 referrerPolicy="no-referrer"
+                onError={() => {
+                  // Fallback to interactive banner if image file is missing or invalid
+                  setCustomBannerImage(null);
+                }}
               />
 
               {/* Clickable Action Hotspots over uploaded banner bottom strip */}

@@ -28,6 +28,10 @@ export const STORE_INFO = {
   googleMapsUrl: 'https://maps.google.com/?q=Kumaraswamy+Temple+Ballari+Karnataka+583104',
   whatsappUrl: 'https://wa.me/918217676626',
   motto: 'BUY | SERVICE | SUPPORT | GROW TOGETHER',
+  // Permanent default banner image URL (loads for all visitors across any device or deployment)
+  defaultBannerUrl: '/assets/icare_banner.png',
+  // Permanent default store logo URL (if provided, or null to render official high-res SVG emblem)
+  defaultLogoUrl: null as string | null,
 };
 
 export const BRAND_ECOSYSTEM = {

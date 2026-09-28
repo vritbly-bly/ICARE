@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { STORE_INFO } from '../data/mockData';
 
 interface BrandLogoProps {
   className?: string;
@@ -18,9 +19,10 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   const [activeCustomLogo, setActiveCustomLogo] = useState<string | null>(() => {
     if (customLogoUrl !== undefined) return customLogoUrl;
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('icare_custom_store_logo');
+      const stored = localStorage.getItem('icare_custom_store_logo');
+      if (stored) return stored;
     }
-    return null;
+    return STORE_INFO.defaultLogoUrl || null;
   });
 
   useEffect(() => {
@@ -31,7 +33,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 
     const handleUpdate = () => {
       if (typeof window !== 'undefined') {
-        setActiveCustomLogo(localStorage.getItem('icare_custom_store_logo'));
+        const stored = localStorage.getItem('icare_custom_store_logo');
+        setActiveCustomLogo(stored || STORE_INFO.defaultLogoUrl || null);
       }
     };
 
