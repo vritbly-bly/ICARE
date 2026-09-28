@@ -1,0 +1,270 @@
+<svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Top & Right Blue Arc Gradient -->
+    <linearGradient id="mainBlueArc" x1="100" y1="50" x2="380" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00a8ff" />
+      <stop offset="35%" stop-color="#0077e6" />
+      <stop offset="70%" stop-color="#0052cc" />
+      <stop offset="100%" stop-color="#003599" />
+    </linearGradient>
+
+    <!-- Mid-Left Yellow/Amber Blend -->
+    <linearGradient id="midYellowArc" x1="80" y1="180" x2="160" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0077e6" />
+      <stop offset="25%" stop-color="#ffb300" />
+      <stop offset="70%" stop-color="#ff8f00" />
+      <stop offset="100%" stop-color="#ff5722" />
+    </linearGradient>
+
+    <!-- Bottom Cupping Hand Gradient -->
+    <linearGradient id="handOrangeGrad" x1="120" y1="280" x2="380" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ff7900" />
+      <stop offset="50%" stop-color="#ff5500" />
+      <stop offset="100%" stop-color="#e64a00" />
+    </linearGradient>
+
+    <!-- Floating Pixel Gradients -->
+    <linearGradient id="pixelGrad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00c0ff" />
+      <stop offset="100%" stop-color="#0066cc" />
+    </linearGradient>
+
+    <!-- Letter 'I' Vibrant Gradient -->
+    <linearGradient id="iLetterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffb300" />
+      <stop offset="45%" stop-color="#ff6d00" />
+      <stop offset="100%" stop-color="#e64a00" />
+    </linearGradient>
+
+    <!-- 'care' Lettering Smooth Blue Gradient -->
+    <linearGradient id="careLetterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0070f3" />
+      <stop offset="40%" stop-color="#0052cc" />
+      <stop offset="100%" stop-color="#002673" />
+    </linearGradient>
+
+    <!-- Laptop Bezel Gradient -->
+    <linearGradient id="screenBezelGrad" x1="170" y1="100" x2="330" y2="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0b1120" />
+    </linearGradient>
+
+    <!-- Laptop Metallic Base -->
+    <linearGradient id="laptopChassis" x1="140" y1="210" x2="360" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f1f5f9" />
+      <stop offset="40%" stop-color="#cbd5e1" />
+      <stop offset="70%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#64748b" />
+    </linearGradient>
+
+    <!-- Trackpad Glow -->
+    <linearGradient id="trackpadGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0099ff" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0077cc" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. UPPER 'C' ARC (Royal Blue to Cyan) -->
+  <path
+    d="M 355 52
+       C 200 15, 90 100, 92 235
+       C 92 250, 96 268, 103 282
+       C 114 260, 126 230, 134 200
+       C 142 120, 215 65, 340 76
+       Z"
+    fill="url(#mainBlueArc)"
+  />
+
+  <!-- 2. MID-LEFT TRANSITION (Amber-Yellow Blend) -->
+  <path
+    d="M 94 220
+       C 96 255, 110 286, 130 310
+       C 138 290, 145 260, 142 232
+       C 136 215, 120 205, 103 205
+       C 98 210, 95 215, 94 220
+       Z"
+    fill="url(#midYellowArc)"
+  />
+
+  <!-- 3. BOTTOM SUPPORTING HAND (Cupping from Underneath) -->
+  <path
+    d="M 108 268
+       C 115 315, 160 365, 255 368
+       C 310 369, 360 338, 380 300
+       C 370 302, 355 310, 335 316
+       C 275 330, 220 310, 180 285
+       C 205 300, 260 305, 310 295
+       C 335 290, 360 275, 368 260
+       C 345 272, 315 278, 285 275
+       C 220 270, 175 235, 150 205
+       C 132 215, 118 238, 108 268
+       Z"
+    fill="url(#handOrangeGrad)"
+  />
+
+  <!-- Hand Finger Contours in Crisp White Accent -->
+  <path
+    d="M 270 308 C 305 308, 340 292, 365 266"
+    stroke="#ffffff"
+    stroke-width="3"
+    stroke-linecap="round"
+    opacity="0.9"
+  />
+  <path
+    d="M 315 320 C 340 315, 365 295, 376 278"
+    stroke="#ffffff"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.75"
+  />
+
+  <!-- 4. CENTRAL OPEN LAPTOP -->
+  <!-- Screen Bezel Outer (Angled display) -->
+  <rect x="175" y="102" width="186" height="126" rx="10" fill="url(#screenBezelGrad)" stroke="#1e293b" stroke-width="2" />
+  
+  <!-- Glossy White Screen Surface -->
+  <rect x="185" y="112" width="166" height="106" rx="4" fill="#ffffff" />
+  
+  <!-- Subtle screen light reflex -->
+  <polygon points="185,112 280,112 240,218 185,218" fill="#f8fafc" opacity="0.6" />
+
+  <!-- Webcam Dot -->
+  <circle cx="268" cy="107" r="2.5" fill="#475569" />
+
+  <!-- Laptop Keyboard Base (Forward Perspective Wedge) -->
+  <polygon
+    points="138,245 398,245 372,226 164,226"
+    fill="url(#laptopChassis)"
+    stroke="#475569"
+    stroke-width="1.5"
+  />
+
+  <!-- Keyboard Key Surface Grid -->
+  <polygon
+    points="168,236 368,236 362,228 174,228"
+    fill="#0f172a"
+  />
+  <!-- Subtle Key Separator Lines -->
+  <line x1="172" y1="232" x2="364" y2="232" stroke="#334155" stroke-width="1" />
+  <line x1="200" y1="228" x2="198" y2="236" stroke="#334155" stroke-width="0.8" />
+  <line x1="230" y1="228" x2="228" y2="236" stroke="#334155" stroke-width="0.8" />
+  <line x1="260" y1="228" x2="260" y2="236" stroke="#334155" stroke-width="0.8" />
+  <line x1="290" y1="228" x2="292" y2="236" stroke="#334155" stroke-width="0.8" />
+  <line x1="320" y1="228" x2="324" y2="236" stroke="#334155" stroke-width="0.8" />
+
+  <!-- Glowing Trackpad Center -->
+  <rect x="234" y="238" width="68" height="7" rx="2" fill="url(#trackpadGrad)" />
+  <rect x="250" y="244" width="36" height="2" rx="1" fill="#38bdf8" />
+
+  <!-- 5. FLOATING PIXEL CLOUD (Emerging from top-right of laptop screen) -->
+  <!-- Top Right Large Square -->
+  <rect x="382" y="80" width="24" height="24" rx="3" fill="url(#pixelGrad1)" />
+  
+  <!-- Upper Mid Squares -->
+  <rect x="360" y="88" width="14" height="14" rx="2" fill="url(#pixelGrad1)" />
+  <rect x="390" y="112" width="22" height="22" rx="3" fill="url(#pixelGrad1)" />
+  <rect x="355" y="112" width="18" height="18" rx="2.5" fill="url(#pixelGrad1)" />
+
+  <!-- Mid Level Squares -->
+  <rect x="320" y="120" width="13" height="13" rx="2" fill="url(#pixelGrad1)" />
+  <rect x="340" y="132" width="16" height="16" rx="2" fill="url(#pixelGrad1)" />
+  <rect x="368" y="144" width="17" height="17" rx="2" fill="url(#pixelGrad1)" />
+  <rect x="392" y="138" width="20" height="20" rx="3" fill="url(#pixelGrad1)" />
+
+  <!-- Inner Screen Trail -->
+  <rect x="288" y="122" width="10" height="10" rx="1.5" fill="url(#pixelGrad1)" />
+  <rect x="302" y="136" width="14" height="14" rx="2" fill="url(#pixelGrad1)" />
+  <rect x="374" y="166" width="16" height="16" rx="2" fill="url(#pixelGrad1)" />
+
+  <!-- 6. TYPOGRAPHY LOCKUP BELOW EMBLEM -->
+  <!-- Letter 'I' (Tall, Solid, Gradient Orange/Yellow) -->
+  <rect x="32" y="380" width="46" height="100" rx="4" fill="url(#iLetterGrad)" />
+
+  <!-- Word 'care' (Bold, Flowing Royal Blue Gradient) -->
+  <g fill="url(#careLetterGrad)">
+    <!-- Letter 'c' -->
+    <path
+      d="M 175 428
+         C 168 412, 150 404, 134 404
+         C 108 404, 90 422, 90 448
+         C 90 472, 108 482, 134 482
+         C 152 482, 168 474, 175 458
+         L 155 454
+         C 150 462, 142 466, 134 466
+         C 120 466, 110 458, 110 448
+         C 110 436, 120 420, 134 420
+         C 142 420, 150 424, 154 432
+         Z"
+    />
+    
+    <!-- Letter 'a' -->
+    <path
+      d="M 235 448
+         L 235 480
+         L 218 480
+         L 218 470
+         C 212 478, 202 482, 190 482
+         C 174 482, 162 472, 162 456
+         C 162 438, 178 430, 206 430
+         L 218 430
+         L 218 424
+         C 218 416, 210 412, 200 412
+         C 190 412, 184 416, 180 422
+         L 166 414
+         C 174 404, 186 400, 202 400
+         C 224 400, 235 412, 235 432
+         Z
+         M 218 442
+         L 204 442
+         C 188 442, 180 446, 180 454
+         C 180 462, 188 468, 198 468
+         C 210 468, 218 460, 218 450
+         Z"
+    />
+
+    <!-- Letter 'r' -->
+    <path
+      d="M 246 404
+         L 264 404
+         L 264 416
+         C 270 406, 280 402, 292 402
+         L 292 422
+         C 278 420, 264 426, 264 440
+         L 264 480
+         L 246 480
+         Z"
+    />
+
+    <!-- Letter 'e' -->
+    <path
+      d="M 360 444
+         C 360 418, 342 402, 318 402
+         C 294 402, 276 418, 276 446
+         C 276 472, 294 482, 320 482
+         C 338 482, 352 474, 358 460
+         L 340 454
+         C 336 462, 328 466, 318 466
+         C 304 466, 296 456, 296 448
+         L 360 448
+         Z
+         M 296 436
+         C 298 426, 306 418, 318 418
+         C 328 418, 338 424, 340 436
+         Z"
+    />
+  </g>
+
+  <!-- 7. '— COMPUTERS —' BOTTOM SUB-BAR -->
+  <line x1="20" y1="512" x2="80" y2="512" stroke="#002147" stroke-width="4" stroke-linecap="round" />
+  <text
+    x="95"
+    y="520"
+    font-family="'Outfit', 'Plus Jakarta Sans', sans-serif"
+    font-weight="900"
+    font-size="28"
+    fill="#002147"
+    letter-spacing="10"
+  >COMPUTERS</text>
+  <line x1="420" y1="512" x2="480" y2="512" stroke="#002147" stroke-width="4" stroke-linecap="round" />
+</svg>

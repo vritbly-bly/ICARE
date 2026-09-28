@@ -1,0 +1,6 @@
+{
+  "name": "iCare Computers - Sales, Service & IT Solutions",
+  "description": "Local computer shop in Ballari offering laptops, desktops, printers, CCTV surveillance, online ordering, repair services, gallery, and live customer support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
