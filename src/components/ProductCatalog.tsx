@@ -222,12 +222,24 @@ const CatalogProductCard: React.FC<{
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
           {/* Metadata */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-1.5 font-medium">
+          <div className="flex items-center gap-2 text-xs text-slate-500 mb-1.5 font-medium flex-wrap">
             <span>{product.brand}</span>
             <span aria-hidden="true">·</span>
             <span className="capitalize">{product.category}</span>
             <span aria-hidden="true">·</span>
             <span className="text-emerald-600 font-semibold">In Stock</span>
+            {isAdmin && product.protected && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span 
+                  className="text-[10px] font-bold text-amber-700 bg-amber-100/90 px-1.5 py-0.5 rounded border border-amber-200/80 inline-flex items-center gap-1"
+                  title={`Protected from sync overwrites (Last edited: ${product.last_updated ? new Date(product.last_updated).toLocaleDateString() : 'Manual'})`}
+                >
+                  <ShieldCheck className="w-3 h-3 text-amber-600" />
+                  <span>Protected</span>
+                </span>
+              </>
+            )}
           </div>
 
           <h3 

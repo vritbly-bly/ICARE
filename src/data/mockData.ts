@@ -1,5 +1,7 @@
 import { Product, GalleryItem, ServicePillar, PaymentConfig } from '../types';
 
+export const CATALOG_DEFAULT_VERSION = 1;
+
 export const DEFAULT_PAYMENT_CONFIG: PaymentConfig = {
   upiId: '8217676626@ybl',
   payeeName: 'iCare Computers (Naga Reddy)',

@@ -217,9 +217,20 @@ const ServiceCardItem: React.FC<{
           </div>
 
           <div className="mt-4">
-            <h3 className="text-base font-bold text-slate-900 font-heading group-hover:text-sky-600 transition-colors">
-              {pillar.title}
-            </h3>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="text-base font-bold text-slate-900 font-heading group-hover:text-sky-600 transition-colors">
+                {pillar.title}
+              </h3>
+              {isAdmin && pillar.protected && (
+                <span 
+                  className="text-[10px] font-bold text-amber-700 bg-amber-100/90 px-1.5 py-0.5 rounded border border-amber-200/80 inline-flex items-center gap-1"
+                  title={`Protected from sync overwrites (Last edited: ${pillar.last_updated ? new Date(pillar.last_updated).toLocaleDateString() : 'Manual'})`}
+                >
+                  <Shield className="w-3 h-3 text-amber-600" />
+                  <span>Protected</span>
+                </span>
+              )}
+            </div>
             <div className="text-xs font-semibold text-sky-700 mt-0.5">
               {pillar.subtitle}
             </div>

@@ -129,6 +129,9 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
       gradient: item.gradient || 'from-sky-700 to-blue-900',
       imageUrl: primaryImg,
       images: images,
+      protected: item.protected !== undefined ? item.protected : true,
+      last_updated: item.last_updated || Date.now(),
+      version: item.version || 1,
     };
   };
 
@@ -151,6 +154,9 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
       features: Array.isArray(item.features) && item.features.length > 0 ? item.features : ['Quality assurance and certified repair parts.'],
       imageUrl: images[0] || item.imageUrl,
       images: images,
+      protected: item.protected !== undefined ? item.protected : true,
+      last_updated: item.last_updated || Date.now(),
+      version: item.version || 1,
     };
   };
 

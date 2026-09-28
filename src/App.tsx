@@ -21,7 +21,14 @@ import { AdminLoginModal } from './components/AdminLoginModal';
 import { ImportDataModal } from './components/ImportDataModal';
 import { useAdmin } from './context/AdminContext';
 import { Product, CartItem, Order, CategoryType, ServicePillar, PaymentConfig } from './types';
-import { PRODUCTS, SERVICE_PILLARS, DEFAULT_PAYMENT_CONFIG } from './data/mockData';
+import { PRODUCTS, SERVICE_PILLARS, DEFAULT_PAYMENT_CONFIG, CATALOG_DEFAULT_VERSION } from './data/mockData';
+
+// Local storage keys for robust versioning & deletion tombstoning
+const STORAGE_PRODUCTS_KEY = 'icare_custom_products';
+const STORAGE_SERVICES_KEY = 'icare_custom_services';
+const STORAGE_DELETED_PROD_KEY = 'icare_deleted_product_ids';
+const STORAGE_DELETED_SERV_KEY = 'icare_deleted_service_ids';
+const STORAGE_CATALOG_VERSION_KEY = 'icare_catalog_version';
 
 export default function App() {
   const { isAdmin, openLoginModal } = useAdmin();
@@ -29,10 +36,10 @@ export default function App() {
   // Global Live Search State
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Products State with LocalStorage Persistence & Live Default Sync
+  // Products State with LocalStorage Persistence & Version-aware initialization
   const [products, setProducts] = useState<Product[]>(() => {
     try {
-      const saved = localStorage.getItem('icare_custom_products');
+      const saved = localStorage.getItem(STORAGE_PRODUCTS_KEY);
       if (saved) {
         const parsed: Product[] = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -45,10 +52,10 @@ export default function App() {
     return PRODUCTS;
   });
 
-  // Services State with LocalStorage Persistence & Live Default Sync
+  // Services State with LocalStorage Persistence & Version-aware initialization
   const [services, setServices] = useState<ServicePillar[]>(() => {
     try {
-      const saved = localStorage.getItem('icare_custom_services');
+      const saved = localStorage.getItem(STORAGE_SERVICES_KEY);
       if (saved) {
         const parsed: ServicePillar[] = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -170,14 +177,31 @@ export default function App() {
       openLoginModal();
       return;
     }
+
+    // Automatically tag manual user edits & additions as 'protected'
+    // and record the 'last_updated' timestamp and incremental version
+    const protectedProduct: Product = {
+      ...savedProduct,
+      protected: true,
+      last_updated: Date.now(),
+      version: (savedProduct.version || 0) + 1,
+    };
+
     setProducts((prev) => {
-      const exists = prev.some((p) => p.id === savedProduct.id);
+      const exists = prev.some((p) => p.id === protectedProduct.id);
       const updated = exists
-        ? prev.map((p) => (p.id === savedProduct.id ? savedProduct : p))
-        : [savedProduct, ...prev];
+        ? prev.map((p) => (p.id === protectedProduct.id ? protectedProduct : p))
+        : [protectedProduct, ...prev];
 
       try {
-        localStorage.setItem('icare_custom_products', JSON.stringify(updated));
+        localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(updated));
+        // Remove from deleted tombstones if it was previously deleted and recreated
+        const deletedRaw = localStorage.getItem(STORAGE_DELETED_PROD_KEY);
+        if (deletedRaw) {
+          const deletedIds: string[] = JSON.parse(deletedRaw);
+          const filtered = deletedIds.filter((id) => id !== protectedProduct.id);
+          localStorage.setItem(STORAGE_DELETED_PROD_KEY, JSON.stringify(filtered));
+        }
       } catch {
         // ignore
       }
@@ -193,7 +217,14 @@ export default function App() {
     setProducts((prev) => {
       const updated = prev.filter((p) => p.id !== productId);
       try {
-        localStorage.setItem('icare_custom_products', JSON.stringify(updated));
+        localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(updated));
+        // Track deleted product ID in persistent deletion tombstones so sync never resurrects deleted items
+        const deletedRaw = localStorage.getItem(STORAGE_DELETED_PROD_KEY);
+        const deletedIds: string[] = deletedRaw ? JSON.parse(deletedRaw) : [];
+        if (!deletedIds.includes(productId)) {
+          deletedIds.push(productId);
+          localStorage.setItem(STORAGE_DELETED_PROD_KEY, JSON.stringify(deletedIds));
+        }
       } catch {
         // ignore
       }
@@ -205,20 +236,54 @@ export default function App() {
   };
 
   const handleResetCatalog = () => {
-    // Non-destructive sync:
-    // Preserves any custom added products, custom prices, custom images, and user modifications,
-    // while bringing in any new code defaults that don't yet exist in the store catalog.
-    setProducts((prev) => {
-      const existingIds = new Set(prev.map((p) => p.id));
-      const existingNames = new Set(prev.map((p) => p.name.toLowerCase().trim()));
-      
-      const missingDefaults = PRODUCTS.filter(
-        (dp) => !existingIds.has(dp.id) && !existingNames.has(dp.name.toLowerCase().trim())
-      );
+    // VERSIONED & PROTECTED CATALOG SYNC:
+    // 1. NEVER overwrites any user edit tagged as 'protected' (custom pricing, specs, images, descriptions, titles).
+    // 2. Checks 'last_updated' timestamps to ensure newer edits are permanently preserved.
+    // 3. Honors deletion tombstones so intentionally deleted products or services are NEVER re-added.
+    // 4. Safely updates non-protected default items only if the code catalog version has advanced.
+    // 5. Adds brand new catalog additions from code without disturbing existing inventory.
+    const deletedProductIds = new Set<string>();
+    const deletedServiceIds = new Set<string>();
+    try {
+      const delProd = localStorage.getItem(STORAGE_DELETED_PROD_KEY);
+      if (delProd) JSON.parse(delProd).forEach((id: string) => deletedProductIds.add(id));
+      const delServ = localStorage.getItem(STORAGE_DELETED_SERV_KEY);
+      if (delServ) JSON.parse(delServ).forEach((id: string) => deletedServiceIds.add(id));
+    } catch {
+      // ignore
+    }
 
-      const merged = [...prev, ...missingDefaults];
+    setProducts((prev) => {
+      const currentMap = new Map<string, Product>();
+      prev.forEach((p) => currentMap.set(p.id, p));
+
+      // Merge defaults intelligently
+      PRODUCTS.forEach((defaultProd) => {
+        // If user deleted this item, do NOT resurrect it
+        if (deletedProductIds.has(defaultProd.id)) {
+          return;
+        }
+
+        const existing = currentMap.get(defaultProd.id);
+        if (!existing) {
+          // Brand new item added to the codebase: append as non-protected default
+          currentMap.set(defaultProd.id, defaultProd);
+        } else if (existing.protected) {
+          // USER EDITED ITEM: ABSOLUTELY DO NOT OVERWRITE
+          // Preserve custom price, title, photos, specs, and last_updated
+        } else {
+          // Non-protected default item: update only if default has newer content
+          currentMap.set(defaultProd.id, {
+            ...defaultProd,
+            version: Math.max(defaultProd.version || 1, existing.version || 1),
+          });
+        }
+      });
+
+      const merged = Array.from(currentMap.values());
       try {
-        localStorage.setItem('icare_custom_products', JSON.stringify(merged));
+        localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(merged));
+        localStorage.setItem(STORAGE_CATALOG_VERSION_KEY, String(CATALOG_DEFAULT_VERSION));
       } catch {
         // ignore
       }
@@ -226,16 +291,33 @@ export default function App() {
     });
 
     setServices((prev) => {
-      const existingIds = new Set(prev.map((s) => s.id));
-      const existingTitles = new Set(prev.map((s) => s.title.toLowerCase().trim()));
+      const currentMap = new Map<string, ServicePillar>();
+      prev.forEach((s) => currentMap.set(s.id, s));
 
-      const missingDefaults = SERVICE_PILLARS.filter(
-        (ds) => !existingIds.has(ds.id) && !existingTitles.has(ds.title.toLowerCase().trim())
-      );
+      SERVICE_PILLARS.forEach((defaultServ) => {
+        // If user deleted this service, do NOT resurrect it
+        if (deletedServiceIds.has(defaultServ.id)) {
+          return;
+        }
 
-      const merged = [...prev, ...missingDefaults];
+        const existing = currentMap.get(defaultServ.id);
+        if (!existing) {
+          // Brand new service from codebase: append
+          currentMap.set(defaultServ.id, defaultServ);
+        } else if (existing.protected) {
+          // USER EDITED SERVICE: ABSOLUTELY DO NOT OVERWRITE
+        } else {
+          // Update non-protected default service
+          currentMap.set(defaultServ.id, {
+            ...defaultServ,
+            version: Math.max(defaultServ.version || 1, existing.version || 1),
+          });
+        }
+      });
+
+      const merged = Array.from(currentMap.values());
       try {
-        localStorage.setItem('icare_custom_services', JSON.stringify(merged));
+        localStorage.setItem(STORAGE_SERVICES_KEY, JSON.stringify(merged));
       } catch {
         // ignore
       }
@@ -273,15 +355,25 @@ export default function App() {
       return;
     }
 
+    const now = Date.now();
+
     if (importedProducts.length > 0) {
+      // Tag imported products as protected with timestamp
+      const protectedImported = importedProducts.map((p, idx) => ({
+        ...p,
+        protected: true,
+        last_updated: p.last_updated || now + idx,
+        version: (p.version || 1),
+      }));
+
       setProducts((prev) => {
         let updated: Product[];
         if (replaceExisting) {
-          updated = importedProducts;
+          updated = protectedImported;
         } else {
           // Merge: replace items with matching id or name, append rest
           const merged = [...prev];
-          importedProducts.forEach((imp) => {
+          protectedImported.forEach((imp) => {
             const idx = merged.findIndex((p) => p.id === imp.id || p.name.toLowerCase() === imp.name.toLowerCase());
             if (idx >= 0) {
               merged[idx] = imp;
@@ -293,7 +385,7 @@ export default function App() {
         }
 
         try {
-          localStorage.setItem('icare_custom_products', JSON.stringify(updated));
+          localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(updated));
         } catch {
           // ignore
         }
@@ -302,13 +394,21 @@ export default function App() {
     }
 
     if (importedServices.length > 0) {
+      // Tag imported services as protected with timestamp
+      const protectedImported = importedServices.map((s, idx) => ({
+        ...s,
+        protected: true,
+        last_updated: s.last_updated || now + idx,
+        version: (s.version || 1),
+      }));
+
       setServices((prev) => {
         let updated: ServicePillar[];
         if (replaceExisting) {
-          updated = importedServices;
+          updated = protectedImported;
         } else {
           const merged = [...prev];
-          importedServices.forEach((imp) => {
+          protectedImported.forEach((imp) => {
             const idx = merged.findIndex((s) => s.id === imp.id || s.title.toLowerCase() === imp.title.toLowerCase());
             if (idx >= 0) {
               merged[idx] = imp;
@@ -320,7 +420,7 @@ export default function App() {
         }
 
         try {
-          localStorage.setItem('icare_custom_services', JSON.stringify(updated));
+          localStorage.setItem(STORAGE_SERVICES_KEY, JSON.stringify(updated));
         } catch {
           // ignore
         }
@@ -353,14 +453,31 @@ export default function App() {
       openLoginModal();
       return;
     }
+
+    // Automatically tag manual user edits & additions as 'protected'
+    // and record the 'last_updated' timestamp and incremental version
+    const protectedService: ServicePillar = {
+      ...savedService,
+      protected: true,
+      last_updated: Date.now(),
+      version: (savedService.version || 0) + 1,
+    };
+
     setServices((prev) => {
-      const exists = prev.some((s) => s.id === savedService.id);
+      const exists = prev.some((s) => s.id === protectedService.id);
       const updated = exists
-        ? prev.map((s) => (s.id === savedService.id ? savedService : s))
-        : [...prev, savedService];
+        ? prev.map((s) => (s.id === protectedService.id ? protectedService : s))
+        : [...prev, protectedService];
 
       try {
-        localStorage.setItem('icare_custom_services', JSON.stringify(updated));
+        localStorage.setItem(STORAGE_SERVICES_KEY, JSON.stringify(updated));
+        // Remove from deleted tombstones if it was previously deleted and recreated
+        const deletedRaw = localStorage.getItem(STORAGE_DELETED_SERV_KEY);
+        if (deletedRaw) {
+          const deletedIds: string[] = JSON.parse(deletedRaw);
+          const filtered = deletedIds.filter((id) => id !== protectedService.id);
+          localStorage.setItem(STORAGE_DELETED_SERV_KEY, JSON.stringify(filtered));
+        }
       } catch {
         // ignore
       }
@@ -376,7 +493,14 @@ export default function App() {
     setServices((prev) => {
       const updated = prev.filter((s) => s.id !== serviceId);
       try {
-        localStorage.setItem('icare_custom_services', JSON.stringify(updated));
+        localStorage.setItem(STORAGE_SERVICES_KEY, JSON.stringify(updated));
+        // Track deleted service ID in persistent deletion tombstones so sync never resurrects deleted services
+        const deletedRaw = localStorage.getItem(STORAGE_DELETED_SERV_KEY);
+        const deletedIds: string[] = deletedRaw ? JSON.parse(deletedRaw) : [];
+        if (!deletedIds.includes(serviceId)) {
+          deletedIds.push(serviceId);
+          localStorage.setItem(STORAGE_DELETED_SERV_KEY, JSON.stringify(deletedIds));
+        }
       } catch {
         // ignore
       }

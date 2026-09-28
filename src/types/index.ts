@@ -26,6 +26,9 @@ export interface Product {
   gradient: string;
   imageUrl?: string;
   images?: string[];
+  protected?: boolean;
+  last_updated?: number;
+  version?: number;
 }
 
 export interface CartItem {
@@ -90,6 +93,9 @@ export interface ServicePillar {
   priceEstimate: string;
   imageUrl?: string;
   images?: string[];
+  protected?: boolean;
+  last_updated?: number;
+  version?: number;
 }
 
 export interface ChatMessage {
