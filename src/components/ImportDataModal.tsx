@@ -8,6 +8,7 @@ interface ImportDataModalProps {
   onImportData: (importedProducts: Product[], importedServices: ServicePillar[], replaceExisting: boolean) => void;
   currentProducts: Product[];
   currentServices: ServicePillar[];
+  onImportBannerLogo?: (bannerUrl: string | null, logoUrl: string | null) => void;
 }
 
 export const ImportDataModal: React.FC<ImportDataModalProps> = ({
@@ -16,6 +17,7 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
   onImportData,
   currentProducts,
   currentServices,
+  onImportBannerLogo,
 }) => {
   const [activeTab, setActiveTab] = useState<'link' | 'file' | 'export'>('link');
   const [urlInput, setUrlInput] = useState('');
@@ -28,13 +30,15 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
   const [parsedPreview, setParsedPreview] = useState<{
     products: Product[];
     services: ServicePillar[];
+    bannerUrl?: string | null;
+    logoUrl?: string | null;
     sourceTitle?: string;
   } | null>(null);
 
   if (!isOpen) return null;
 
   // Parser helper that handles either:
-  // 1) Full export format: { products: [...], services: [...] }
+  // 1) Full export format: { products: [...], services: [...], bannerUrl: "...", logoUrl: "..." }
   // 2) Array of products: [...]
   // 3) E-commerce/tech specs link scraper / auto-extract
   const parseJsonData = (rawText: string) => {
@@ -42,6 +46,8 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
 
     let parsedProducts: Product[] = [];
     let parsedServices: ServicePillar[] = [];
+    let parsedBannerUrl: string | null | undefined = undefined;
+    let parsedLogoUrl: string | null | undefined = undefined;
 
     if (Array.isArray(data)) {
       // Direct array of products or services
@@ -62,17 +68,28 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
       if (Array.isArray(data.services)) {
         parsedServices = data.services.map((s: any, idx: number) => normalizeService(s, idx));
       }
+      if (data.bannerUrl || data.customBannerImage) {
+        parsedBannerUrl = data.bannerUrl || data.customBannerImage;
+      }
+      if (data.logoUrl || data.customLogoUrl || data.customStoreLogo) {
+        parsedLogoUrl = data.logoUrl || data.customLogoUrl || data.customStoreLogo;
+      }
       // If object itself has name and price, it's a single product
       if (data.name && (data.price !== undefined || data.specs)) {
         parsedProducts.push(normalizeProduct(data, 0));
       }
     }
 
-    if (parsedProducts.length === 0 && parsedServices.length === 0) {
-      throw new Error('No valid products or services found in the provided data. Please ensure it contains items with name, price, specs or images.');
+    if (parsedProducts.length === 0 && parsedServices.length === 0 && !parsedBannerUrl && !parsedLogoUrl) {
+      throw new Error('No valid products, services, or catalog configuration found in the provided data.');
     }
 
-    return { products: parsedProducts, services: parsedServices };
+    return { 
+      products: parsedProducts, 
+      services: parsedServices,
+      bannerUrl: parsedBannerUrl,
+      logoUrl: parsedLogoUrl,
+    };
   };
 
   const normalizeProduct = (item: any, idx: number): Product => {
@@ -266,14 +283,30 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
   const handleApplyImport = () => {
     if (!parsedPreview) return;
     onImportData(parsedPreview.products, parsedPreview.services, replaceMode);
+    
+    // Also apply imported banner or logo if present
+    if (onImportBannerLogo && (parsedPreview.bannerUrl !== undefined || parsedPreview.logoUrl !== undefined)) {
+      onImportBannerLogo(parsedPreview.bannerUrl || null, parsedPreview.logoUrl || null);
+    }
     onClose();
   };
 
   // 4. Export Current Catalog to JSON
   const handleDownloadBackup = () => {
+    let savedBanner: string | null = null;
+    let savedLogo: string | null = null;
+    try {
+      savedBanner = localStorage.getItem('icare_custom_banner_image');
+      savedLogo = localStorage.getItem('icare_custom_store_logo');
+    } catch {
+      // ignore
+    }
+
     const exportData = {
       store: 'iCare Computers & Technologies - Ballari',
       exportedAt: new Date().toISOString(),
+      bannerUrl: savedBanner,
+      logoUrl: savedLogo,
       products: currentProducts,
       services: currentServices,
     };
@@ -505,6 +538,22 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
                   <span>Replace entire catalog (instead of merging)</span>
                 </label>
               </div>
+
+              {/* Banner / Logo badge in preview */}
+              {(parsedPreview.bannerUrl || parsedPreview.logoUrl) && (
+                <div className="flex items-center gap-2 p-2 bg-indigo-50/70 border border-indigo-100 rounded-xl text-xs text-indigo-900">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                  <span>
+                    Includes updated{' '}
+                    {[
+                      parsedPreview.bannerUrl ? 'Home Banner' : null,
+                      parsedPreview.logoUrl ? 'Store Logo' : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' and ')}
+                  </span>
+                </div>
+              )}
 
               {/* Sample preview list */}
               <div className="max-h-48 overflow-y-auto space-y-2 pr-1">

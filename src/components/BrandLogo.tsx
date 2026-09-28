@@ -297,6 +297,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
             src={activeCustomLogo}
             alt="Logo"
             className="w-full h-full object-contain p-0.5"
+            onError={() => {
+              setActiveCustomLogo(null);
+            }}
           />
         </div>
       );
@@ -310,6 +313,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
             alt="iCare Computers"
             style={{ maxHeight: dimensions.height }}
             className="w-auto max-w-[200px] object-contain"
+            onError={() => {
+              setActiveCustomLogo(null);
+            }}
           />
         </div>
       );
@@ -323,6 +329,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           alt="iCare Computers"
           style={{ maxHeight: dimensions.height }}
           className="w-auto max-w-[260px] object-contain drop-shadow-xs"
+          onError={() => {
+            setActiveCustomLogo(null);
+          }}
         />
       </div>
     );

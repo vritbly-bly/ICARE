@@ -21,11 +21,26 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
     } catch {
       // ignore
     }
-    return STORE_INFO.defaultBannerUrl || null;
+    return null;
   });
 
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [bannerUrlText, setBannerUrlText] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    const handleBannerUpdate = () => {
+      try {
+        const stored = localStorage.getItem('icare_custom_banner_image');
+        setCustomBannerImage(stored || null);
+      } catch {
+        // ignore
+      }
+    };
+    window.addEventListener('icare_banner_updated', handleBannerUpdate);
+    return () => window.removeEventListener('icare_banner_updated', handleBannerUpdate);
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isAdmin) return;
@@ -38,6 +53,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
         setCustomBannerImage(result);
         try {
           localStorage.setItem('icare_custom_banner_image', result);
+          window.dispatchEvent(new Event('icare_banner_updated'));
         } catch {
           // ignore
         }
@@ -47,11 +63,26 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
     }
   };
 
+  const handleApplyBannerUrl = () => {
+    if (!bannerUrlText.trim()) return;
+    try {
+      new URL(bannerUrlText.trim());
+      setCustomBannerImage(bannerUrlText.trim());
+      localStorage.setItem('icare_custom_banner_image', bannerUrlText.trim());
+      window.dispatchEvent(new Event('icare_banner_updated'));
+      setBannerUrlText('');
+      setShowUrlInput(false);
+    } catch {
+      // invalid URL
+    }
+  };
+
   const handleRemoveCustomBanner = () => {
     if (!isAdmin) return;
     setCustomBannerImage(null);
     try {
       localStorage.removeItem('icare_custom_banner_image');
+      window.dispatchEvent(new Event('icare_banner_updated'));
     } catch {
       // ignore
     }
@@ -85,26 +116,67 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
         <div className="relative w-full rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden bg-slate-900 border border-slate-200/80 group">
           {/* Quick Floating Action to Upload / Change Image (ADMIN ONLY) */}
           {isAdmin && (
-            <div className="absolute top-3 right-3 z-30 flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-opacity">
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="px-2.5 py-1.5 text-[11px] font-semibold text-slate-800 bg-white/95 hover:bg-white backdrop-blur-md rounded-lg shadow-md hover:shadow-lg border border-slate-200/80 flex items-center gap-1.5 transition-all cursor-pointer"
-                title="Upload official high-resolution banner image (Admin Only)"
-              >
-                <Upload className="w-3.5 h-3.5 text-sky-600" />
-                <span className="hidden sm:inline">
-                  {customBannerImage ? 'Change Banner' : 'Upload Banner'}
-                </span>
-              </button>
-
-              {customBannerImage && (
+            <div className="absolute top-3 right-3 z-30 flex flex-col items-end gap-1.5 opacity-90 hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-1.5">
                 <button
-                  onClick={handleRemoveCustomBanner}
-                  className="p-1.5 text-slate-600 hover:text-red-600 bg-white/95 hover:bg-red-50 backdrop-blur-md rounded-lg shadow-md border border-slate-200/80 transition-colors cursor-pointer"
-                  title="Reset to default interactive banner (Admin Only)"
+                  type="button"
+                  onClick={() => setShowUrlInput(!showUrlInput)}
+                  className="px-2.5 py-1.5 text-[11px] font-semibold text-slate-800 bg-white/95 hover:bg-white backdrop-blur-md rounded-lg shadow-md hover:shadow-lg border border-slate-200/80 flex items-center gap-1.5 transition-all cursor-pointer"
+                  title="Set banner image from web URL (Admin Only)"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Globe className="w-3.5 h-3.5 text-sky-600" />
+                  <span className="hidden sm:inline">Banner URL</span>
                 </button>
+
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-2.5 py-1.5 text-[11px] font-semibold text-slate-800 bg-white/95 hover:bg-white backdrop-blur-md rounded-lg shadow-md hover:shadow-lg border border-slate-200/80 flex items-center gap-1.5 transition-all cursor-pointer"
+                  title="Upload official high-resolution banner image (Admin Only)"
+                >
+                  <Upload className="w-3.5 h-3.5 text-sky-600" />
+                  <span className="hidden sm:inline">
+                    {customBannerImage ? 'Upload New' : 'Upload Banner'}
+                  </span>
+                </button>
+
+                {customBannerImage && (
+                  <button
+                    type="button"
+                    onClick={handleRemoveCustomBanner}
+                    className="p-1.5 text-slate-600 hover:text-red-600 bg-white/95 hover:bg-red-50 backdrop-blur-md rounded-lg shadow-md border border-slate-200/80 transition-colors cursor-pointer"
+                    title="Reset to default interactive banner (Admin Only)"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+
+              {/* Collapsible Banner URL Input */}
+              {showUrlInput && (
+                <div className="flex items-center gap-1.5 bg-white/95 p-1.5 rounded-xl shadow-lg border border-slate-200 text-xs mt-1 animate-in fade-in slide-in-from-top-1">
+                  <input
+                    type="url"
+                    value={bannerUrlText}
+                    onChange={(e) => setBannerUrlText(e.target.value)}
+                    placeholder="https://example.com/banner.jpg"
+                    className="px-2 py-1 text-xs border border-slate-300 rounded-lg text-slate-900 w-56 sm:w-72 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyBannerUrl}
+                    className="px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded-lg font-bold text-xs cursor-pointer shadow-xs whitespace-nowrap"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowUrlInput(false)}
+                    className="px-1.5 py-1 text-slate-400 hover:text-slate-600 text-xs cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
               )}
             </div>
           )}

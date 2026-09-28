@@ -117,12 +117,12 @@ export const AdminBar: React.FC<AdminBarProps> = ({
                   ? 'bg-emerald-600 text-white border-emerald-500'
                   : 'bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border-slate-700'
               }`}
-              title="Sync catalog with latest default items from code"
+              title="Safely merge any new catalog items without erasing your custom additions or edits"
             >
               {syncStatus ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-white" />
-                  <span>Synced!</span>
+                  <span>Synced Safely!</span>
                 </>
               ) : (
                 <>

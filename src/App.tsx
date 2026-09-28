@@ -205,14 +205,61 @@ export default function App() {
   };
 
   const handleResetCatalog = () => {
-    try {
-      localStorage.removeItem('icare_custom_products');
-      localStorage.removeItem('icare_custom_services');
-    } catch {
-      // ignore
+    // Non-destructive sync:
+    // Preserves any custom added products, custom prices, custom images, and user modifications,
+    // while bringing in any new code defaults that don't yet exist in the store catalog.
+    setProducts((prev) => {
+      const existingIds = new Set(prev.map((p) => p.id));
+      const existingNames = new Set(prev.map((p) => p.name.toLowerCase().trim()));
+      
+      const missingDefaults = PRODUCTS.filter(
+        (dp) => !existingIds.has(dp.id) && !existingNames.has(dp.name.toLowerCase().trim())
+      );
+
+      const merged = [...prev, ...missingDefaults];
+      try {
+        localStorage.setItem('icare_custom_products', JSON.stringify(merged));
+      } catch {
+        // ignore
+      }
+      return merged;
+    });
+
+    setServices((prev) => {
+      const existingIds = new Set(prev.map((s) => s.id));
+      const existingTitles = new Set(prev.map((s) => s.title.toLowerCase().trim()));
+
+      const missingDefaults = SERVICE_PILLARS.filter(
+        (ds) => !existingIds.has(ds.id) && !existingTitles.has(ds.title.toLowerCase().trim())
+      );
+
+      const merged = [...prev, ...missingDefaults];
+      try {
+        localStorage.setItem('icare_custom_services', JSON.stringify(merged));
+      } catch {
+        // ignore
+      }
+      return merged;
+    });
+  };
+
+  const handleImportBannerLogo = (bannerUrl: string | null, logoUrl: string | null) => {
+    if (bannerUrl) {
+      try {
+        localStorage.setItem('icare_custom_banner_image', bannerUrl);
+        window.dispatchEvent(new Event('icare_banner_updated'));
+      } catch {
+        // ignore
+      }
     }
-    setProducts(PRODUCTS);
-    setServices(SERVICE_PILLARS);
+    if (logoUrl) {
+      try {
+        localStorage.setItem('icare_custom_store_logo', logoUrl);
+        window.dispatchEvent(new Event('icare_logo_updated'));
+      } catch {
+        // ignore
+      }
+    }
   };
 
   // IMPORT DATA HANDLER (Link or File)
@@ -595,6 +642,7 @@ export default function App() {
         onImportData={handleImportData}
         currentProducts={products}
         currentServices={services}
+        onImportBannerLogo={handleImportBannerLogo}
       />
 
       {/* Admin Authentication & Passcode Modal */}
