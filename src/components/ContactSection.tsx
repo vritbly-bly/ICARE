@@ -20,7 +20,7 @@ export const ContactSection: React.FC = () => {
     setTimeout(() => {
       // open WhatsApp with formatted message
       const text = encodeURIComponent(
-        `Hello Venkata Reddy sir,\nNew inquiry from website:\n• Name: ${formData.name}\n• Phone: ${formData.phone}\n• Service: ${formData.serviceType}\n• Message: ${formData.message}`
+        `Hello Naga Reddy sir,\nNew inquiry from website:\n• Name: ${formData.name}\n• Phone: ${formData.phone}\n• Service: ${formData.serviceType}\n• Message: ${formData.message}`
       );
       window.open(`https://wa.me/91${STORE_INFO.phone}?text=${text}`, '_blank');
     }, 800);
@@ -144,7 +144,7 @@ export const ContactSection: React.FC = () => {
                 Request a Callback or Custom PC Quote
               </h3>
               <p className="text-xs text-slate-500 mt-1">
-                Fill in your requirement. Venkata Reddy or a certified engineer will get back to you within 30 minutes.
+                Fill in your requirement. Naga Reddy or a certified engineer will get back to you within 30 minutes.
               </p>
             </div>
 
@@ -157,7 +157,7 @@ export const ContactSection: React.FC = () => {
                   Inquiry Sent Successfully!
                 </h4>
                 <p className="text-xs text-slate-600 max-w-sm mx-auto">
-                  We have forwarded your details to Venkata Reddy at iCare Computers. You can also chat immediately on WhatsApp.
+                  We have forwarded your details to Naga Reddy at iCare Computers. You can also chat immediately on WhatsApp.
                 </p>
                 <a
                   href={`https://wa.me/91${STORE_INFO.phone}`}
@@ -235,7 +235,7 @@ export const ContactSection: React.FC = () => {
                   className="w-full py-3 px-4 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-md shadow-sky-600/20 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>Submit Inquiry to Venkata Reddy</span>
+                  <span>Submit Inquiry to Naga Reddy</span>
                 </button>
               </form>
             )}

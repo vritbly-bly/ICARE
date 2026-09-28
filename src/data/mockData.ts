@@ -1,8 +1,8 @@
 import { Product, GalleryItem, ServicePillar, PaymentConfig } from '../types';
 
 export const DEFAULT_PAYMENT_CONFIG: PaymentConfig = {
-  upiId: '7406059999@ybl',
-  payeeName: 'iCare Computers (Venkata Reddy)',
+  upiId: '8217676626@ybl',
+  payeeName: 'iCare Computers (Naga Reddy)',
   qrImageUrl: '',
   accountNumber: '03210200001234',
   ifscCode: 'UCBA0000321',
@@ -14,9 +14,9 @@ export const STORE_INFO = {
   name: 'iCare Computers',
   tagline: 'Your Trusted IT Partner for a Smarter Tomorrow',
   subTagline: 'Technology for a Better Tomorrow',
-  proprietor: 'Venkata Reddy',
-  phone: '7406059999',
-  formattedPhone: '+91 74060 59999',
+  proprietor: 'Naga Reddy',
+  phone: '8217676626',
+  formattedPhone: '+91 82176 76626',
   email: 'icarecomputers@gmail.com',
   address: '#Opp Kumaraswamy Temple, Beside UCO Bank, Ballari, Karnataka 583104',
   landmark: 'Beside UCO Bank, Opp Kumaraswamy Temple',
@@ -26,7 +26,7 @@ export const STORE_INFO = {
   hoursWeekdays: 'Mon - Sat: 9:30 AM – 9:00 PM',
   hoursSunday: 'Sunday: 10:00 AM – 2:00 PM',
   googleMapsUrl: 'https://maps.google.com/?q=Kumaraswamy+Temple+Ballari+Karnataka+583104',
-  whatsappUrl: 'https://wa.me/917406059999',
+  whatsappUrl: 'https://wa.me/918217676626',
   motto: 'BUY | SERVICE | SUPPORT | GROW TOGETHER',
 };
 
@@ -481,7 +481,7 @@ export const PRODUCTS: Product[] = [
     description: 'Ensure 99.9% uptime for your business operations. Our technicians handle virus cleanups, network optimization, data backups, and hardware health.',
     badge: 'Business Essential',
     tags: ['AMC', 'Corporate', 'Priority Support', 'Ballari Local'],
-    warranty: 'Annual Contract with Dedicated Service Lead (Venkata Reddy)',
+    warranty: 'Annual Contract with Dedicated Service Lead (Naga Reddy)',
     imageFallbackIcon: 'Headphones',
     gradient: 'from-purple-800 to-indigo-950'
   }
@@ -565,7 +565,7 @@ export const TESTIMONIALS = [
   {
     name: 'K. S. Prashanth',
     role: 'Civil Engineer, Ballari',
-    text: 'My laptop display suddenly stopped working right before a municipal submission. Venkata Reddy sir arranged an original replacement panel in 4 hours! Invaluable service.',
+    text: 'My laptop display suddenly stopped working right before a municipal submission. Naga Reddy sir arranged an original replacement panel in 4 hours! Invaluable service.',
     rating: 5,
     date: '2 weeks ago',
     verified: true

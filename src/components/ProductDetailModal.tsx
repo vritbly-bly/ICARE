@@ -42,7 +42,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   );
 
   const whatsappMessage = encodeURIComponent(
-    `Hello Venkata Reddy sir, I am inquiring about *${product.name}* (Price: ₹${product.price.toLocaleString('en-IN')}) from iCare Computers website. Is this model available for delivery/pickup today?`
+    `Hello Naga Reddy sir, I am inquiring about *${product.name}* (Price: ₹${product.price.toLocaleString('en-IN')}) from iCare Computers website. Is this model available for delivery/pickup today?`
   );
 
   const handlePrevImage = () => {

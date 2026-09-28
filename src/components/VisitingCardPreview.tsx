@@ -36,7 +36,7 @@ export const VisitingCardPreview: React.FC = () => {
               Official Business Card &amp; Credentials
             </h2>
             <p className="text-slate-600 text-sm mt-1 max-w-2xl">
-              Inspect our verified physical business card details, contact proprietor Venkata Reddy, or save credentials directly to your mobile phone.
+              Inspect our verified physical business card details, contact proprietor Naga Reddy, or save credentials directly to your mobile phone.
             </p>
           </div>
 
@@ -296,7 +296,7 @@ export const VisitingCardPreview: React.FC = () => {
             </div>
 
             <h3 className="text-lg font-bold text-slate-900">
-              Need direct assistance from Venkata Reddy?
+              Need direct assistance from Naga Reddy?
             </h3>
 
             <p className="text-slate-600 text-xs leading-relaxed">

@@ -233,14 +233,6 @@ export const AdminLoginModal: React.FC = () => {
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                <div className="mt-2 text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200/80">
-                  <span className="font-semibold text-slate-700">Initial Default PIN:</span>{' '}
-                  <code className="bg-slate-200 px-1 py-0.5 rounded font-mono text-slate-800">583104</code> or{' '}
-                  <code className="bg-slate-200 px-1 py-0.5 rounded font-mono text-slate-800">icare123</code>
-                  <div className="text-[10px] text-slate-400 mt-1">
-                    (You can change this PIN anytime after logging in).
-                  </div>
-                </div>
               </div>
 
               <div className="flex gap-2.5 pt-2">

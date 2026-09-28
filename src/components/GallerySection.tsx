@@ -234,7 +234,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({ onBookService })
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-500">Verified By:</span>
-                      <span className="font-semibold text-sky-700">Venkata Reddy (iCare Computers)</span>
+                      <span className="font-semibold text-sky-700">Naga Reddy (iCare Computers)</span>
                     </div>
                   </div>
                 </div>

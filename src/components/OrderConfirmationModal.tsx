@@ -25,7 +25,7 @@ export const OrderConfirmationModal: React.FC<OrderConfirmationModalProps> = ({
     .join('\n');
 
   const whatsappMessage = encodeURIComponent(
-    `Hello Venkata Reddy sir, I have placed an order on iCare Computers website.\n\n` +
+    `Hello Naga Reddy sir, I have placed an order on iCare Computers website.\n\n` +
       `*Order ID:* ${order.id}\n` +
       `*Customer:* ${order.customerName}\n` +
       `*Phone:* ${order.phone}\n` +

@@ -70,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="text-white hover:text-orange-400 transition-colors font-medium flex items-center gap-1.5"
             >
               <Phone className="w-3 h-3 text-orange-400" />
-              <span>Call Venkata Reddy: {STORE_INFO.formattedPhone}</span>
+              <span>Call Naga Reddy: {STORE_INFO.formattedPhone}</span>
             </a>
             <span className="text-slate-500">·</span>
             <button
@@ -332,7 +332,7 @@ export const Header: React.FC<HeaderProps> = ({
               className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-bold text-white bg-sky-600 rounded-xl text-center"
             >
               <Phone className="w-4 h-4" />
-              <span>Call Venkata Reddy ({STORE_INFO.phone})</span>
+              <span>Call Naga Reddy ({STORE_INFO.phone})</span>
             </a>
             <p className="text-[11px] text-center text-slate-500">
               #Opp Kumaraswamy Temple, Beside UCO Bank, Ballari

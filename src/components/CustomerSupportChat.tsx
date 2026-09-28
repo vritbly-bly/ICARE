@@ -38,7 +38,7 @@ export const CustomerSupportChat: React.FC<CustomerSupportChatProps> = ({
     {
       id: 'm1',
       sender: 'bot',
-      text: `Hello! Welcome to iCare Computers, Ballari. I'm your digital support assistant. How can Venkata Reddy and our technical team assist you today?`,
+      text: `Hello! Welcome to iCare Computers, Ballari. I'm your digital support assistant. How can Naga Reddy and our technical team assist you today?`,
       timestamp: 'Just now',
       options: [
         { label: '💻 Laptop Repair & Screen Quote', action: 'repair_quote' },
@@ -46,7 +46,7 @@ export const CustomerSupportChat: React.FC<CustomerSupportChatProps> = ({
         { label: '📹 Book CCTV Site Survey in Ballari', action: 'cctv_survey' },
         { label: '📍 Store Location & Working Hours', action: 'location_info' },
         { label: '⚡ Fast SSD / RAM Upgrade Price', action: 'upgrade_info' },
-        { label: '💬 Talk to Venkata Reddy on WhatsApp', action: 'whatsapp_direct' },
+        { label: '💬 Talk to Naga Reddy on WhatsApp', action: 'whatsapp_direct' },
       ],
     },
   ]);
@@ -108,10 +108,10 @@ export const CustomerSupportChat: React.FC<CustomerSupportChatProps> = ({
 • Motherboard dead / liquid spill chip-level rework: ₹1,200 – ₹2,900
 • Hinge fabrication: ₹750 – ₹1,400
 
-All repairs include a 90-day store guarantee. Would you like to bring your laptop in today or talk to proprietor Venkata Reddy?`,
+All repairs include a 90-day store guarantee. Would you like to bring your laptop in today or talk to proprietor Naga Reddy?`,
         timestamp: 'Just now',
         options: [
-          { label: '💬 WhatsApp Venkata Reddy directly', action: 'whatsapp_direct' },
+          { label: '💬 WhatsApp Naga Reddy directly', action: 'whatsapp_direct' },
           { label: '📍 View store location on Google Maps', action: 'location_info' },
         ],
       };
@@ -144,7 +144,7 @@ All repairs include a 90-day store guarantee. Would you like to bring your lapto
 • Monday – Saturday: 9:30 AM – 9:00 PM
 • Sunday: 10:00 AM – 2:00 PM
 
-📞 Direct Contact: +91 7406059999 (Venkata Reddy)`,
+📞 Direct Contact: +91 8217676626 (Naga Reddy)`,
         timestamp: 'Just now',
         options: [
           { label: '📞 Call Store Now', action: 'call_phone' },
@@ -176,11 +176,11 @@ Turnaround time is just 45 minutes at our express counter.`,
       return {
         id: `b-${Date.now()}`,
         sender: 'bot',
-        text: `You can reach proprietor Venkata Reddy directly at +91 7406059999 via phone call or WhatsApp for quick quotations, doorstep delivery coordination, or custom configurations!`,
+        text: `You can reach proprietor Naga Reddy directly at +91 8217676626 via phone call or WhatsApp for quick quotations, doorstep delivery coordination, or custom configurations!`,
         timestamp: 'Just now',
         options: [
-          { label: '💬 Open WhatsApp with Venkata Reddy', action: 'whatsapp_direct' },
-          { label: '📞 Call +91 7406059999', action: 'call_phone' },
+          { label: '💬 Open WhatsApp with Naga Reddy', action: 'whatsapp_direct' },
+          { label: '📞 Call +91 8217676626', action: 'call_phone' },
         ],
       };
     }
@@ -191,11 +191,11 @@ Turnaround time is just 45 minutes at our express counter.`,
       sender: 'bot',
       text: `Thank you for your message! At iCare Computers, we supply laptops (HP, Dell, Lenovo, ASUS), custom PCs, Epson printers, and CCTV surveillance, alongside fast repairs. 
 
-Would you like to browse our online catalog, or would you like Venkata Reddy to review this directly?`,
+Would you like to browse our online catalog, or would you like Naga Reddy to review this directly?`,
       timestamp: 'Just now',
       options: [
         { label: '📦 View Store Catalog & Order', action: 'view_catalog' },
-        { label: '💬 Forward query to WhatsApp: 7406059999', action: 'whatsapp_direct' },
+        { label: '💬 Forward query to WhatsApp: 8217676626', action: 'whatsapp_direct' },
         { label: '📍 Store Location & Hours', action: 'location_info' },
       ],
     };
@@ -205,7 +205,7 @@ Would you like to browse our online catalog, or would you like Venkata Reddy to 
     if (action === 'whatsapp_direct') {
       window.open(
         `https://wa.me/91${STORE_INFO.phone}?text=${encodeURIComponent(
-          'Hello Venkata Reddy sir, I am contacting you from the iCare Computers website for customer support.'
+          'Hello Naga Reddy sir, I am contacting you from the iCare Computers website for customer support.'
         )}`,
         '_blank'
       );
@@ -263,7 +263,7 @@ Would you like to browse our online catalog, or would you like Venkata Reddy to 
                   iCare Support Desk
                 </h3>
                 <p className="text-[11px] text-sky-200 flex items-center gap-1">
-                  <span>Venkata Reddy &amp; Tech Team</span>
+                  <span>Naga Reddy &amp; Tech Team</span>
                   <span>·</span>
                   <span className="text-emerald-300 font-medium">Online</span>
                 </p>
@@ -383,7 +383,7 @@ Would you like to browse our online catalog, or would you like Venkata Reddy to 
             </form>
             <div className="flex items-center justify-between text-[10px] text-slate-400 mt-2 px-1">
               <span>iCare Computers · Ballari</span>
-              <span>Proprietor: Venkata Reddy</span>
+              <span>Proprietor: Naga Reddy</span>
             </div>
           </div>
         </div>

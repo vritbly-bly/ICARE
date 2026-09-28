@@ -28,6 +28,7 @@ import {
 } from '../utils/brandManager';
 import { BrandLogo } from './BrandLogo';
 import { OfficialBrandLogo } from './OfficialBrandLogo';
+import { useAdmin } from '../context/AdminContext';
 
 interface EditLogoModalProps {
   isOpen: boolean;
@@ -48,6 +49,7 @@ export const EditLogoModal: React.FC<EditLogoModalProps> = ({
   onStoreLogoChange,
   onBrandLogoChange,
 }) => {
+  const { isAdmin } = useAdmin();
   const [activeTab, setActiveTab] = useState<'store' | 'brands'>(initialTab);
   
   // Store Logo State
@@ -332,6 +334,8 @@ export const EditLogoModal: React.FC<EditLogoModalProps> = ({
   };
 
   const currentBrandsList = ecosystem[selectedCategory] || [];
+
+  if (!isOpen || !isAdmin) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/65 backdrop-blur-xs flex items-center justify-center p-4">

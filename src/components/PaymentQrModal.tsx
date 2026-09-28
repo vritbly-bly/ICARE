@@ -90,7 +90,7 @@ export const PaymentQrModal: React.FC<PaymentQrModalProps> = ({
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!upiId.trim()) {
-      setError('Please provide a valid UPI ID (e.g., 7406059999@ybl)');
+      setError('Please provide a valid UPI ID (e.g., 8217676626@ybl)');
       return;
     }
 
@@ -432,7 +432,7 @@ export const PaymentQrModal: React.FC<PaymentQrModalProps> = ({
                 <input
                   type="text"
                   required
-                  placeholder="e.g. 7406059999@ybl"
+                  placeholder="e.g. 8217676626@ybl"
                   value={upiId}
                   onChange={(e) => setUpiId(e.target.value)}
                   className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white text-slate-900 font-mono focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
@@ -445,7 +445,7 @@ export const PaymentQrModal: React.FC<PaymentQrModalProps> = ({
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Venkata Reddy - iCare"
+                  placeholder="e.g. Naga Reddy - iCare"
                   value={payeeName}
                   onChange={(e) => setPayeeName(e.target.value)}
                   className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
