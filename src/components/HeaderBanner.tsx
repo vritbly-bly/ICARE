@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Phone, Mail, Globe, Upload, Trash2, Camera, Laptop, Printer, Cpu, ShieldCheck, Wrench, Sparkles, Image as ImageIcon } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { STORE_INFO } from '../data/mockData';
+import { useAdmin } from '../context/AdminContext';
 
 interface HeaderBannerProps {
   onSelectCategory?: (category: string) => void;
@@ -12,6 +13,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
   onSelectCategory,
   onExploreCatalog,
 }) => {
+  const { isAdmin } = useAdmin();
   const [customBannerImage, setCustomBannerImage] = useState<string | null>(() => {
     try {
       return localStorage.getItem('icare_custom_banner_image');
@@ -24,6 +26,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
   const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isAdmin) return;
     const file = e.target.files?.[0];
     if (file) {
       setIsUploading(true);
@@ -43,6 +46,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
   };
 
   const handleRemoveCustomBanner = () => {
+    if (!isAdmin) return;
     setCustomBannerImage(null);
     try {
       localStorage.removeItem('icare_custom_banner_image');
@@ -77,29 +81,31 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
 
         {/* Banner Frame Container: Perfectly fits standard ~3.5:1 ratio on desktop and adjusts responsively */}
         <div className="relative w-full rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden bg-slate-900 border border-slate-200/80 group">
-          {/* Quick Floating Action to Upload / Change Image */}
-          <div className="absolute top-3 right-3 z-30 flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-opacity">
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="px-2.5 py-1.5 text-[11px] font-semibold text-slate-800 bg-white/95 hover:bg-white backdrop-blur-md rounded-lg shadow-md hover:shadow-lg border border-slate-200/80 flex items-center gap-1.5 transition-all cursor-pointer"
-              title="Upload official high-resolution banner image (PNG/JPG)"
-            >
-              <Upload className="w-3.5 h-3.5 text-sky-600" />
-              <span className="hidden sm:inline">
-                {customBannerImage ? 'Change Banner' : 'Upload Banner'}
-              </span>
-            </button>
-
-            {customBannerImage && (
+          {/* Quick Floating Action to Upload / Change Image (ADMIN ONLY) */}
+          {isAdmin && (
+            <div className="absolute top-3 right-3 z-30 flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-opacity">
               <button
-                onClick={handleRemoveCustomBanner}
-                className="p-1.5 text-slate-600 hover:text-red-600 bg-white/95 hover:bg-red-50 backdrop-blur-md rounded-lg shadow-md border border-slate-200/80 transition-colors cursor-pointer"
-                title="Reset to default interactive banner"
+                onClick={() => fileInputRef.current?.click()}
+                className="px-2.5 py-1.5 text-[11px] font-semibold text-slate-800 bg-white/95 hover:bg-white backdrop-blur-md rounded-lg shadow-md hover:shadow-lg border border-slate-200/80 flex items-center gap-1.5 transition-all cursor-pointer"
+                title="Upload official high-resolution banner image (Admin Only)"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Upload className="w-3.5 h-3.5 text-sky-600" />
+                <span className="hidden sm:inline">
+                  {customBannerImage ? 'Change Banner' : 'Upload Banner'}
+                </span>
               </button>
-            )}
-          </div>
+
+              {customBannerImage && (
+                <button
+                  onClick={handleRemoveCustomBanner}
+                  className="p-1.5 text-slate-600 hover:text-red-600 bg-white/95 hover:bg-red-50 backdrop-blur-md rounded-lg shadow-md border border-slate-200/80 transition-colors cursor-pointer"
+                  title="Reset to default interactive banner (Admin Only)"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          )}
 
           {customBannerImage ? (
             /* USER'S CUSTOM UPLOADED BANNER - PERFECT FIT */
