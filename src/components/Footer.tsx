@@ -8,9 +8,10 @@ interface FooterProps {
   onNavigate: (section: string) => void;
   onOpenPaymentQr?: () => void;
   onOpenDashboard?: () => void;
+  onOpenPublishSync?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPaymentQr, onOpenDashboard }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPaymentQr, onOpenDashboard, onOpenPublishSync }) => {
   const { isAdmin, openLoginModal } = useAdmin();
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -219,6 +220,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenPaymentQr, onO
                   className="hover:text-sky-400 transition-colors text-slate-400 cursor-pointer"
                 >
                   Store Payment QR
+                </button>
+                <span aria-hidden="true">·</span>
+              </>
+            )}
+            {isAdmin && onOpenPublishSync && (
+              <>
+                <button
+                  onClick={onOpenPublishSync}
+                  className="hover:text-emerald-300 transition-colors text-emerald-400 font-bold flex items-center gap-1 cursor-pointer"
+                >
+                  <span>Sync to Visitor Site</span>
                 </button>
                 <span aria-hidden="true">·</span>
               </>

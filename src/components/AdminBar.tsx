@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Plus, QrCode, Upload, KeyRound, LogOut, RefreshCw, Check, Database, Globe, BarChart3 } from 'lucide-react';
+import { ShieldCheck, Plus, QrCode, Upload, KeyRound, LogOut, RefreshCw, Check, Database, Globe, BarChart3, CloudUpload } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
 interface AdminBarProps {
@@ -10,6 +10,7 @@ interface AdminBarProps {
   onResetCatalog?: () => void;
   onOpenImportData?: () => void;
   onOpenDashboard?: () => void;
+  onOpenPublishSync?: () => void;
 }
 
 export const AdminBar: React.FC<AdminBarProps> = ({
@@ -20,6 +21,7 @@ export const AdminBar: React.FC<AdminBarProps> = ({
   onResetCatalog,
   onOpenImportData,
   onOpenDashboard,
+  onOpenPublishSync,
 }) => {
   const { isAdmin, logout, openLoginModal } = useAdmin();
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
@@ -40,17 +42,31 @@ export const AdminBar: React.FC<AdminBarProps> = ({
       className="sticky top-0 z-50 bg-gradient-to-r from-slate-950 via-slate-900 to-sky-950 text-white border-b border-sky-500/30 px-4 py-2 shadow-lg backdrop-blur-md"
     >
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
-        {/* Left: Admin Status Indicator */}
-        <div className="flex items-center gap-2">
-          <span className="flex h-2.5 w-2.5 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          <div className="flex items-center gap-1.5 font-bold tracking-wide">
-            <ShieldCheck className="w-4 h-4 text-sky-400" />
-            <span className="text-sky-300">ADMIN MODE:</span>
-            <span className="text-slate-200 hidden sm:inline">Store Owner Privileges Active</span>
+        {/* Left: Admin Status Indicator & Live Sync Button */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2.5 w-2.5 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <div className="flex items-center gap-1.5 font-bold tracking-wide">
+              <ShieldCheck className="w-4 h-4 text-sky-400" />
+              <span className="text-sky-300">ADMIN:</span>
+              <span className="text-slate-200 hidden xl:inline">Store Active</span>
+            </div>
           </div>
+
+          {/* 1-Click Sync to Visitor Site */}
+          {onOpenPublishSync && (
+            <button
+              onClick={onOpenPublishSync}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold transition-all shadow-md cursor-pointer border border-emerald-400/40 animate-pulse hover:animate-none"
+              title="Publish all hardware catalog, logo, and web banner updates directly to the live visitor site"
+            >
+              <CloudUpload className="w-3.5 h-3.5 text-white" />
+              <span>Sync All to Visitor Site</span>
+            </button>
+          )}
         </div>
 
         {/* Center: Admin Quick Actions */}

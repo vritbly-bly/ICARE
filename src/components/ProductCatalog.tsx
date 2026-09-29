@@ -18,7 +18,8 @@ import {
   ChevronRight,
   Edit3,
   Trash2,
-  Images
+  Images,
+  CloudUpload
 } from 'lucide-react';
 import { Product, CategoryType } from '../types';
 import { useAdmin } from '../context/AdminContext';
@@ -34,6 +35,7 @@ interface ProductCatalogProps {
   onDeleteProduct: (productId: string) => void;
   searchQuery: string;
   onSearchChange: (q: string) => void;
+  onOpenPublishSync?: () => void;
 }
 
 // Sub-component for individual product card with 4:3 fit frame & multi-image switcher
@@ -383,6 +385,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   onDeleteProduct,
   searchQuery,
   onSearchChange,
+  onOpenPublishSync,
 }) => {
   const { isAdmin } = useAdmin();
   const [selectedBrand, setSelectedBrand] = useState<string>('all');
@@ -473,13 +476,25 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
             </div>
 
             {isAdmin && (
-              <button
-                onClick={onOpenAddProduct}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-sm shadow-sky-600/20 cursor-pointer whitespace-nowrap"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Add Product</span>
-              </button>
+              <div className="flex items-center gap-2">
+                {onOpenPublishSync && (
+                  <button
+                    onClick={onOpenPublishSync}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-xl transition-all shadow-sm shadow-emerald-600/20 cursor-pointer whitespace-nowrap border border-emerald-400/30"
+                    title="Sync and publish all hardware catalog changes to visitor site"
+                  >
+                    <CloudUpload className="w-4 h-4" />
+                    <span>Sync to Visitor Site</span>
+                  </button>
+                )}
+                <button
+                  onClick={onOpenAddProduct}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-sm shadow-sky-600/20 cursor-pointer whitespace-nowrap"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add Product</span>
+                </button>
+              </div>
             )}
           </div>
         </div>

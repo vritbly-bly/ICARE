@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Phone, MapPin, Menu, X, Search, QrCode, Upload, ShieldCheck, Lock, BarChart3 } from 'lucide-react';
+import { ShoppingBag, Phone, MapPin, Menu, X, Search, QrCode, Upload, ShieldCheck, Lock, BarChart3, CloudUpload } from 'lucide-react';
 import { STORE_INFO } from '../data/mockData';
 import { BrandLogo } from './BrandLogo';
 import { useAdmin } from '../context/AdminContext';
@@ -15,6 +15,7 @@ interface HeaderProps {
   onOpenPaymentQr?: () => void;
   onOpenEditLogoModal?: (tab?: 'store' | 'brands') => void;
   onOpenDashboard?: () => void;
+  onOpenPublishSync?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -28,6 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenPaymentQr,
   onOpenEditLogoModal,
   onOpenDashboard,
+  onOpenPublishSync,
 }) => {
   const { isAdmin, openLoginModal } = useAdmin();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -174,6 +176,19 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Zone 3: Primary Actions */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Admin 1-Click Sync to Visitor Site Button */}
+          {isAdmin && onOpenPublishSync && (
+            <button
+              onClick={onOpenPublishSync}
+              aria-label="Publish All Changes to Visitor Site"
+              title="Publish all hardware catalog, logo, and web banner updates directly to the live visitor site"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-xl transition-all cursor-pointer shadow-xs border border-emerald-400/40"
+            >
+              <CloudUpload className="w-4 h-4" />
+              <span>Sync to Visitor Site</span>
+            </button>
+          )}
+
           {/* Admin Dashboard Button */}
           {isAdmin && onOpenDashboard && (
             <button

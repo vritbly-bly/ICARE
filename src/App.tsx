@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { ProductCatalog } from './components/ProductCatalog';
@@ -20,9 +20,11 @@ import { AdminBar } from './components/AdminBar';
 import { AdminLoginModal } from './components/AdminLoginModal';
 import { ImportDataModal } from './components/ImportDataModal';
 import { DashboardModal } from './components/DashboardModal';
+import { PublishSyncModal } from './components/PublishSyncModal';
 import { useAdmin } from './context/AdminContext';
 import { Product, CartItem, Order, CategoryType, ServicePillar, PaymentConfig } from './types';
 import { PRODUCTS, SERVICE_PILLARS, DEFAULT_PAYMENT_CONFIG, CATALOG_DEFAULT_VERSION } from './data/mockData';
+import { getPublishedSnapshot, REMOTE_SYNC_STORAGE_KEY, PublishedStoreSnapshot } from './utils/syncManager';
 
 // Local storage keys for robust versioning & deletion tombstoning
 const STORAGE_PRODUCTS_KEY = 'icare_custom_products';
@@ -120,6 +122,9 @@ export default function App() {
   // Inventory Dashboard Modal State
   const [isDashboardModalOpen, setIsDashboardModalOpen] = useState(false);
 
+  // 1-Click Publish & Visitor Sync Modal State
+  const [isPublishSyncModalOpen, setIsPublishSyncModalOpen] = useState(false);
+
   const handleOpenDashboard = () => {
     if (!isAdmin) {
       openLoginModal();
@@ -127,6 +132,86 @@ export default function App() {
     }
     setIsDashboardModalOpen(true);
   };
+
+  const handleOpenPublishSync = () => {
+    if (!isAdmin) {
+      openLoginModal();
+      return;
+    }
+    setIsPublishSyncModalOpen(true);
+  };
+
+  const handleSyncApplied = (snapshot: PublishedStoreSnapshot) => {
+    if (snapshot.products) setProducts(snapshot.products);
+    if (snapshot.services) setServices(snapshot.services);
+    if (snapshot.paymentConfig) setPaymentConfig(snapshot.paymentConfig);
+  };
+
+  // Cross-tab and Live Visitor synchronization listeners
+  useEffect(() => {
+    // 1. Listen for local broadcast events when admin publishes changes
+    const handleLiveSyncEvent = (e: any) => {
+      const detail = e.detail as PublishedStoreSnapshot;
+      if (detail) {
+        if (detail.products) setProducts(detail.products);
+        if (detail.services) setServices(detail.services);
+        if (detail.paymentConfig) setPaymentConfig(detail.paymentConfig);
+      }
+    };
+
+    // 2. Cross-tab storage change listener (for visitors having multiple tabs open)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === REMOTE_SYNC_STORAGE_KEY && e.newValue) {
+        try {
+          const parsed: PublishedStoreSnapshot = JSON.parse(e.newValue);
+          if (parsed.products) setProducts(parsed.products);
+          if (parsed.services) setServices(parsed.services);
+          if (parsed.paymentConfig) setPaymentConfig(parsed.paymentConfig);
+        } catch {
+          // ignore
+        }
+      }
+    };
+
+    // 3. Optional asynchronous check for static deployed public/store-config.json
+    const checkRemoteStoreConfig = async () => {
+      try {
+        const response = await fetch('/store-config.json?v=' + Date.now(), { cache: 'no-cache' });
+        if (response.ok) {
+          const remoteData = await response.json();
+          if (remoteData && remoteData.products && Array.isArray(remoteData.products) && remoteData.products.length > 0) {
+            // If visitor has no local overrides or remote version is newer, hydrate state
+            const currentLocal = localStorage.getItem(REMOTE_SYNC_STORAGE_KEY);
+            const currentTimestamp = currentLocal ? JSON.parse(currentLocal).publishedTimestamp || 0 : 0;
+            if (!currentLocal || (remoteData.publishedTimestamp && remoteData.publishedTimestamp > currentTimestamp)) {
+              setProducts(remoteData.products);
+              if (remoteData.services) setServices(remoteData.services);
+              if (remoteData.paymentConfig) setPaymentConfig(remoteData.paymentConfig);
+              if (remoteData.bannerImageUrl) {
+                localStorage.setItem('icare_custom_banner_image', remoteData.bannerImageUrl);
+                window.dispatchEvent(new Event('icare_banner_updated'));
+              }
+              if (remoteData.storeLogoUrl) {
+                localStorage.setItem('icare_custom_store_logo', remoteData.storeLogoUrl);
+                window.dispatchEvent(new Event('icare_logo_updated'));
+              }
+            }
+          }
+        }
+      } catch {
+        // quiet fallback for offline or custom domain environments
+      }
+    };
+
+    window.addEventListener('icare_live_sync_completed', handleLiveSyncEvent);
+    window.addEventListener('storage', handleStorageChange);
+    checkRemoteStoreConfig();
+
+    return () => {
+      window.removeEventListener('icare_live_sync_completed', handleLiveSyncEvent);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
   const handleOpenEditLogoModal = (
     tab: 'store' | 'brands' = 'store', 
@@ -622,6 +707,7 @@ export default function App() {
         onResetCatalog={handleResetCatalog}
         onOpenImportData={() => setIsImportDataModalOpen(true)}
         onOpenDashboard={handleOpenDashboard}
+        onOpenPublishSync={handleOpenPublishSync}
       />
 
       {/* 3-Zone Sticky Navigation with Global Search Bar & Payment QR */}
@@ -636,6 +722,7 @@ export default function App() {
         onOpenPaymentQr={() => setIsPaymentQrModalOpen(true)}
         onOpenEditLogoModal={handleOpenEditLogoModal}
         onOpenDashboard={handleOpenDashboard}
+        onOpenPublishSync={handleOpenPublishSync}
       />
 
       {/* Main Content Area */}
@@ -644,6 +731,7 @@ export default function App() {
         <HeaderBanner
           onSelectCategory={handleCategorySelect}
           onExploreCatalog={() => scrollToSection('catalog')}
+          onOpenPublishSync={handleOpenPublishSync}
         />
 
         {/* Hero Section with Clean Header & Quick Actions */}
@@ -665,6 +753,7 @@ export default function App() {
           onDeleteProduct={handleDeleteProduct}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          onOpenPublishSync={handleOpenPublishSync}
         />
 
         {/* 6 Core IT Pillars & Interactive Repair Cost Estimator (With Add/Edit/Delete) */}
@@ -694,6 +783,7 @@ export default function App() {
         onNavigate={scrollToSection}
         onOpenPaymentQr={() => setIsPaymentQrModalOpen(true)}
         onOpenDashboard={handleOpenDashboard}
+        onOpenPublishSync={handleOpenPublishSync}
       />
 
       {/* Floating Customer Support Chat Widget */}
@@ -793,6 +883,16 @@ export default function App() {
         onSelectCategory={handleCategorySelect}
         onOpenAddProduct={handleOpenAddProduct}
         onOpenAddService={handleOpenAddService}
+      />
+
+      {/* 1-Click Publish & Visitor Site Synchronization Modal */}
+      <PublishSyncModal
+        isOpen={isPublishSyncModalOpen}
+        onClose={() => setIsPublishSyncModalOpen(false)}
+        products={products}
+        services={services}
+        paymentConfig={paymentConfig}
+        onSyncApplied={handleSyncApplied}
       />
 
       {/* Admin Authentication & Passcode Modal */}

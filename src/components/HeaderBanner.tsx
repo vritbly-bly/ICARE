@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Phone, Mail, Globe, Upload, Trash2, Camera, Laptop, Printer, Cpu, ShieldCheck, Wrench, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { Phone, Mail, Globe, Upload, Trash2, Camera, Laptop, Printer, Cpu, ShieldCheck, Wrench, Sparkles, Image as ImageIcon, CloudUpload } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { STORE_INFO } from '../data/mockData';
 import { useAdmin } from '../context/AdminContext';
@@ -7,11 +7,13 @@ import { useAdmin } from '../context/AdminContext';
 interface HeaderBannerProps {
   onSelectCategory?: (category: string) => void;
   onExploreCatalog?: () => void;
+  onOpenPublishSync?: () => void;
 }
 
 export const HeaderBanner: React.FC<HeaderBannerProps> = ({
   onSelectCategory,
   onExploreCatalog,
+  onOpenPublishSync,
 }) => {
   const { isAdmin } = useAdmin();
   const [customBannerImage, setCustomBannerImage] = useState<string | null>(() => {
@@ -148,6 +150,18 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
                     title="Reset to default interactive banner (Admin Only)"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+
+                {onOpenPublishSync && (
+                  <button
+                    type="button"
+                    onClick={onOpenPublishSync}
+                    className="px-2.5 py-1.5 text-[11px] font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-lg shadow-md border border-emerald-400/40 flex items-center gap-1.5 transition-all cursor-pointer"
+                    title="Publish current banner & catalog changes to live visitors"
+                  >
+                    <CloudUpload className="w-3.5 h-3.5 text-white" />
+                    <span className="hidden sm:inline">Sync to Visitors</span>
                   </button>
                 )}
               </div>
