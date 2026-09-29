@@ -290,16 +290,24 @@ git push origin main
 
           {activeTab === 'github' && (
             <div className="space-y-4">
-              <div className="p-4 bg-slate-900 text-white rounded-2xl space-y-2">
+              <div className="p-4 bg-slate-900 text-white rounded-2xl space-y-2.5">
                 <div className="flex items-center gap-2 text-xs font-bold text-sky-400">
                   <Github className="w-4 h-4" />
                   <span>GitHub Repository &amp; Pages Sync Workflow</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Your project already includes the automated GitHub Pages workflow file:
-                  <code className="text-amber-300 ml-1 font-mono text-[11px]">.github/workflows/deploy.yml</code>.
-                  To ensure that visitors accessing your website across all devices see your updated products and banners permanently without requiring local cache, save your updated configuration file.
+                  Your project includes the automated GitHub Pages workflow file:
+                  <code className="text-amber-300 ml-1 font-mono text-[11px]">.github/workflows/deploy.yml</code> (Node 22 LTS, Vite 8 builder).
                 </p>
+                <div className="p-3 bg-sky-950/80 border border-sky-800/60 rounded-xl text-[11px] text-sky-200 space-y-1">
+                  <div className="font-bold text-white flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
+                    <span>Important GitHub Repository Setting:</span>
+                  </div>
+                  <p>
+                    In your GitHub repo, go to <strong>Settings → Pages → Build and deployment → Source</strong> and select <strong>"GitHub Actions"</strong>. This enables the automated workflow to build the production bundle and deploy it seamlessly.
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-2">
