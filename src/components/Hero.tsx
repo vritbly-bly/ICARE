@@ -30,15 +30,15 @@ export const Hero: React.FC<HeroProps> = ({
             <span className="text-orange-300">Beside UCO Bank</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-heading">
-            Your Trusted IT Partner for a{' '}
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight font-heading">
+            Complete Hardware Sales,{' '}
             <span className="bg-gradient-to-r from-sky-400 via-cyan-300 to-orange-400 bg-clip-text text-transparent">
-              Smarter Tomorrow
+              Chip-Level Service &amp; CCTV
             </span>
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed max-w-3xl">
-            Brand-new laptops, custom-built gaming PCs, high-definition CCTV security kits, ink-tank printers, and certified chip-level repairs. Genuine manufacturer warranty with fast local delivery across Ballari.
+            Brand-new laptops, certified refurbished systems, custom gaming rigs, high-definition CCTV security kits, ink-tank printers, and precision motherboard repairs with fast local delivery across Ballari.
           </p>
 
           {/* Primary Action Buttons */}

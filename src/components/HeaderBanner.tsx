@@ -252,136 +252,280 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
               </div>
             </div>
           ) : (
-            /* HIGH-FIDELITY RECREATED BANNER MATCHING THE USER'S IMAGE */
-            <div className="relative w-full aspect-[3.4/1] min-h-[220px] sm:min-h-[280px] md:min-h-[340px] lg:min-h-[380px] bg-white overflow-hidden flex flex-col justify-between">
-              {/* Background Geometric Waves: Clean white left, sweeping royal blue & orange swooshes right */}
-              <div className="absolute inset-0 pointer-events-none">
-                {/* Right Royal Blue Wave & Grid Pattern */}
-                <div 
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0284c7]/20 to-[#0052cc]"
-                  style={{ clipPath: 'polygon(36% 0%, 100% 0%, 100% 100%, 54% 100%)' }}
-                />
-                <div 
-                  className="absolute inset-0 bg-gradient-to-br from-[#0284c7] via-[#005bbb] to-[#003d99]"
-                  style={{ clipPath: 'polygon(42% 0%, 100% 0%, 100% 100%, 58% 100%)' }}
-                />
-                
-                {/* Orange Dynamic Curve Layer */}
-                <div 
-                  className="absolute inset-0 bg-gradient-to-r from-[#f97316] via-[#ea580c] to-[#c2410c]"
-                  style={{ clipPath: 'polygon(55% 82%, 100% 82%, 100% 100%, 57% 100%)' }}
-                />
-                <div 
-                  className="absolute top-1/2 right-0 w-[500px] h-[300px] bg-gradient-to-t from-[#ea580c] to-[#f97316] opacity-90"
-                  style={{ clipPath: 'ellipse(65% 45% at 75% 75%)' }}
-                />
-
-                {/* Subtle tech dots pattern on blue area */}
-                <div 
-                  className="absolute right-0 top-0 w-1/2 h-full opacity-10" 
-                  style={{ backgroundImage: 'radial-gradient(#ffffff 1.5px, transparent 1.5px)', backgroundSize: '20px 20px' }} 
-                />
-
-                {/* White reflective floor highlight */}
-                <div className="absolute bottom-11 inset-x-0 h-24 bg-gradient-to-t from-white/90 via-white/40 to-transparent" />
+            /* HIGH-FIDELITY FAITHFUL RECREATION OF USER'S REFURBISHED PREMIUM LAPTOPS BANNER */
+            <div className="relative w-full aspect-[3.4/1] min-h-[260px] sm:min-h-[340px] md:min-h-[420px] lg:min-h-[480px] bg-white overflow-hidden flex flex-col justify-between select-none">
+              {/* Wooden Tabletop Surface in middle/lower section */}
+              <div 
+                className="absolute inset-x-0 bottom-0 h-[62%] pointer-events-none"
+                style={{
+                  background: 'linear-gradient(to bottom, #d8b88d 0%, #c49d68 15%, #b58953 45%, #9e723e 75%, #875e2c 100%)',
+                  boxShadow: 'inset 0 4px 12px rgba(0,0,0,0.15)'
+                }}
+              >
+                {/* Wood plank subtle lines */}
+                <div className="absolute inset-0 opacity-20 bg-[linear-gradient(90deg,transparent_0%,rgba(0,0,0,0.08)_50%,transparent_100%)] bg-[length:140px_100%]" />
+                <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#5a3915_1px,transparent_1px)] bg-[size:16px_16px]" />
               </div>
 
-              {/* Main Banner Body: Left Branding + Right Hardware Showcase */}
-              <div className="relative z-10 flex-1 grid grid-cols-12 items-center px-4 sm:px-8 lg:px-12 pt-3 sm:pt-6 pb-2">
-                {/* Left 5-6 Columns: Brand Logo, Slogan, Pillars */}
-                <div className="col-span-12 sm:col-span-6 lg:col-span-5 space-y-1.5 sm:space-y-3">
-                  {/* Brand Wordmark with Cupped Hand & Laptop Icon */}
-                  <div className="flex items-center gap-3">
-                    <BrandLogo variant="full" size="lg" />
-                  </div>
+              {/* Upper White Backdrop */}
+              <div className="absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-slate-50 via-white to-amber-50/40 pointer-events-none" />
 
-                  {/* SALES | SERVICE | SOLUTIONS Pills */}
-                  <div className="flex items-center gap-2 text-[10px] sm:text-xs font-black tracking-widest uppercase">
-                    <span className="text-[#0062cc]">SALES</span>
-                    <span className="text-slate-300">|</span>
-                    <span className="text-[#ea580c]">SERVICE</span>
-                    <span className="text-slate-300">|</span>
-                    <span className="text-[#16a34a]">SOLUTIONS</span>
-                  </div>
+              {/* Dynamic Bottom-Right Sweeping Royal Blue Wave */}
+              <div 
+                className="absolute right-0 bottom-0 w-[68%] h-[56%] pointer-events-none z-10"
+                style={{
+                  background: 'linear-gradient(135deg, #0056b3 0%, #003d82 45%, #00224d 100%)',
+                  clipPath: 'polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                  boxShadow: '-8px -4px 20px rgba(0,35,80,0.4)'
+                }}
+              >
+                {/* Cyan Glow Wave Edge */}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-r from-[#00d4ff] via-[#38bdf8] to-transparent opacity-80"
+                  style={{
+                    clipPath: 'polygon(17% 0%, 20% 0%, 3% 100%, 0% 100%)'
+                  }}
+                />
+                {/* Digital Circuit Grid Pattern */}
+                <div 
+                  className="absolute inset-0 opacity-15"
+                  style={{
+                    backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+                    backgroundSize: '18px 18px'
+                  }}
+                />
+              </div>
 
-                  {/* Cursive Tagline with Orange Swash */}
-                  <div className="pt-1">
-                    <p 
-                      className="text-lg sm:text-2xl lg:text-3xl font-bold text-[#0052cc] leading-tight tracking-tight italic"
-                      style={{ fontFamily: "'Caveat', cursive, sans-serif" }}
-                    >
-                      Your Trusted IT Partner for a Smarter Tomorrow
-                    </p>
-                    {/* Orange swoosh underline */}
-                    <div className="w-24 sm:w-36 h-1 bg-gradient-to-r from-[#ea580c] via-[#f97316] to-transparent rounded-full mt-0.5" />
-                  </div>
+              {/* TOP HEADER ROW: Left Brand Logo, Center Cursive Slogan, Right Cursive Slogan */}
+              <div className="relative z-20 pt-2 sm:pt-4 px-3 sm:px-6 md:px-8 grid grid-cols-12 items-start">
+                {/* Left 4 Cols: iCare Logo */}
+                <div className="col-span-12 sm:col-span-4 flex items-center gap-2">
+                  <BrandLogo variant="full" size="md" />
                 </div>
 
-                {/* Right 6-7 Columns: Hardware Hardware Showcase (Laptop, Monitor, Tower, Printer, CCTV) */}
-                <div className="col-span-12 sm:col-span-6 lg:col-span-7 flex items-end justify-end relative h-full">
-                  {/* Hikvision CCTV Camera (Top Right) */}
-                  <div className="absolute -top-2 sm:top-1 right-2 sm:right-6 flex flex-col items-center drop-shadow-xl z-20">
-                    <div className="bg-white/95 px-2 py-1 rounded-md border border-slate-200 text-[9px] font-black text-slate-800 tracking-wider flex items-center gap-1 shadow-sm">
-                      <Camera className="w-3 h-3 text-red-600" />
-                      <span>HIKVISION CCTV</span>
-                    </div>
-                  </div>
+                {/* Center 5 Cols: 'Your Trusted Tech Partner :' */}
+                <div className="col-span-12 sm:col-span-4 text-center hidden sm:block pt-0.5">
+                  <p 
+                    className="text-lg sm:text-2xl md:text-3xl font-bold text-[#005bbb] tracking-tight italic"
+                    style={{ fontFamily: "'Caveat', cursive, sans-serif" }}
+                  >
+                    Your Trusted Tech Partner :
+                  </p>
+                </div>
 
-                  {/* Interactive Tech Hardware Grid Cluster */}
-                  <div className="grid grid-cols-4 gap-2 sm:gap-3 w-full max-w-xl pb-2 items-end">
-                    {/* 1. Laptops */}
-                    <div 
-                      onClick={() => handleCategoryClick('laptops')}
-                      className="bg-white/90 hover:bg-white backdrop-blur-xs p-2 rounded-xl shadow-lg border border-slate-200/90 text-center group cursor-pointer transition-all hover:-translate-y-1"
-                    >
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
-                        <Laptop className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <div className="text-[10px] sm:text-xs font-bold text-slate-800">Laptops</div>
-                      <div className="text-[8px] sm:text-[9px] text-slate-500 font-medium">Dell • HP • Asus</div>
-                    </div>
-
-                    {/* 2. Desktops & Custom Rigs */}
-                    <div 
-                      onClick={() => handleCategoryClick('desktops')}
-                      className="bg-white/90 hover:bg-white backdrop-blur-xs p-2 rounded-xl shadow-lg border border-slate-200/90 text-center group cursor-pointer transition-all hover:-translate-y-1"
-                    >
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
-                        <Cpu className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <div className="text-[10px] sm:text-xs font-bold text-slate-800">Desktops</div>
-                      <div className="text-[8px] sm:text-[9px] text-slate-500 font-medium">Core i3/i5/i7 Tower</div>
-                    </div>
-
-                    {/* 3. Printers */}
-                    <div 
-                      onClick={() => handleCategoryClick('printers')}
-                      className="bg-white/90 hover:bg-white backdrop-blur-xs p-2 rounded-xl shadow-lg border border-slate-200/90 text-center group cursor-pointer transition-all hover:-translate-y-1"
-                    >
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
-                        <Printer className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <div className="text-[10px] sm:text-xs font-bold text-slate-800">Printers</div>
-                      <div className="text-[8px] sm:text-[9px] text-slate-500 font-medium">Epson • Canon</div>
-                    </div>
-
-                    {/* 4. CCTV Kits */}
-                    <div 
-                      onClick={() => handleCategoryClick('cctv')}
-                      className="bg-white/90 hover:bg-white backdrop-blur-xs p-2 rounded-xl shadow-lg border border-slate-200/90 text-center group cursor-pointer transition-all hover:-translate-y-1"
-                    >
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
-                        <Camera className="w-5 h-5 sm:w-6 sm:h-6" />
-                      </div>
-                      <div className="text-[10px] sm:text-xs font-bold text-slate-800">CCTV 4K</div>
-                      <div className="text-[8px] sm:text-[9px] text-slate-500 font-medium">Night Vision Cam</div>
-                    </div>
-                  </div>
+                {/* Right 3 Cols: 'Smart Choice for a Smarter Tomorrow' */}
+                <div className="col-span-12 sm:col-span-4 text-right hidden sm:block pt-0.5 pr-2">
+                  <p 
+                    className="text-lg sm:text-2xl md:text-3xl font-bold text-[#005bbb] tracking-tight italic"
+                    style={{ fontFamily: "'Caveat', cursive, sans-serif" }}
+                  >
+                    Smart Choice for a <span className="text-[#0047ba]">Smarter Tomorrow</span>
+                  </p>
                 </div>
               </div>
 
-              {/* Bottom Multi-Tone Ribbon (Exact Match to Banner Bottom Bar) */}
-              <div className="relative z-20 grid grid-cols-1 md:grid-cols-12 text-white font-medium text-xs leading-none">
+              {/* CENTER CORE: 'REFURBISHED PREMIUM LAPTOPS' + Laptops Row */}
+              <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-2 sm:px-4 py-1">
+                {/* Emblem Badge Cluster */}
+                <div className="flex flex-col items-center text-center space-y-0.5 sm:space-y-1 drop-shadow-md">
+                  {/* Green 'REFURBISHED' pill badge */}
+                  <div className="inline-flex items-center px-4 sm:px-6 py-0.5 sm:py-1 rounded-full bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700 text-white font-extrabold text-[10px] sm:text-xs md:text-sm tracking-wider uppercase border border-emerald-300 shadow-md">
+                    <span>REFURBISHED</span>
+                  </div>
+
+                  {/* 3D Chrome Metallic 'PREMIUM' Heading */}
+                  <h2 
+                    className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none"
+                    style={{
+                      textShadow: `
+                        0 1px 0 #b0c4de,
+                        0 2px 0 #87a9d0,
+                        0 3px 0 #5c8fc2,
+                        0 4px 0 #3275b4,
+                        0 5px 0 #1b538e,
+                        0 6px 1px rgba(0,0,0,0.1),
+                        0 0 5px rgba(0,0,0,0.1),
+                        0 1px 3px rgba(0,0,0,0.3),
+                        0 3px 5px rgba(0,0,0,0.2),
+                        0 5px 10px rgba(0,0,0,0.25)
+                      `,
+                      background: 'linear-gradient(to bottom, #ffffff 0%, #f0f4f8 40%, #d4e0ee 70%, #9cb8d8 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'white',
+                      fontFamily: "'Outfit', sans-serif"
+                    }}
+                  >
+                    PREMIUM
+                  </h2>
+
+                  {/* Red Glossy 'LAPTOPS' Box */}
+                  <div className="inline-flex items-center justify-center px-6 sm:px-10 py-0.5 sm:py-1 rounded-lg bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white font-black text-sm sm:text-lg md:text-2xl tracking-widest uppercase shadow-lg shadow-red-900/30 border border-red-400">
+                    <span>LAPTOPS</span>
+                  </div>
+
+                  {/* Subtitle: High Performance | Great Reliability | Affordable Prices */}
+                  <div className="flex items-center justify-center gap-2 sm:gap-4 text-[9px] sm:text-xs md:text-sm font-bold text-slate-800 pt-0.5">
+                    <span>High Performance</span>
+                    <span className="text-slate-400">|</span>
+                    <span>Great Reliability</span>
+                    <span className="text-slate-400">|</span>
+                    <span>Affordable Prices</span>
+                  </div>
+                </div>
+
+                {/* LAPTOPS ROW ON WOODEN TABLE: Left cluster & Right cluster */}
+                <div className="w-full flex items-end justify-between px-2 sm:px-6 md:px-10 mt-1 sm:mt-2">
+                  {/* Left 4 Laptops (Lenovo, HP, Dell, ASUS) */}
+                  <div className="flex items-end -space-x-4 sm:-space-x-6 md:-space-x-8">
+                    {/* Laptop 1: Lenovo */}
+                    <div className="w-16 sm:w-24 md:w-32 lg:w-40 transition-transform hover:-translate-y-2 cursor-pointer drop-shadow-xl" onClick={() => handleCategoryClick('laptops')}>
+                      <div className="relative bg-slate-900 rounded-t-md p-1 border border-slate-700 aspect-[16/10] overflow-hidden flex flex-col justify-between">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-600 mx-auto" />
+                        <div className="absolute inset-1.5 bg-gradient-to-br from-slate-900 via-red-950 to-slate-950 rounded flex items-center justify-center">
+                          <span className="text-[7px] sm:text-[9px] font-black text-white bg-red-600 px-1 py-0.5 rounded">Lenovo</span>
+                        </div>
+                      </div>
+                      <div className="h-1.5 sm:h-2 bg-gradient-to-b from-slate-700 to-slate-900 rounded-b-md shadow-md" />
+                    </div>
+
+                    {/* Laptop 2: HP (with Windows 11 Bloom Wallpaper) */}
+                    <div className="w-20 sm:w-32 md:w-44 lg:w-52 transition-transform hover:-translate-y-2 cursor-pointer drop-shadow-2xl z-10" onClick={() => handleCategoryClick('laptops')}>
+                      <div className="relative bg-slate-900 rounded-t-md p-1.5 border border-slate-600 aspect-[16/10] overflow-hidden flex flex-col justify-between">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-600 mx-auto" />
+                        <div className="absolute inset-1.5 bg-gradient-to-br from-sky-400 via-blue-600 to-indigo-900 rounded flex flex-col items-center justify-center p-1">
+                          <div className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-white/60 flex items-center justify-center text-white text-[8px] sm:text-[10px] font-serif italic font-bold">hp</div>
+                          <span className="text-[6px] sm:text-[8px] text-white/90 font-mono mt-0.5">Windows 11</span>
+                        </div>
+                      </div>
+                      <div className="h-2 sm:h-2.5 bg-gradient-to-b from-slate-400 via-slate-600 to-slate-800 rounded-b-md shadow-lg" />
+                    </div>
+
+                    {/* Laptop 3: Dell Latitude */}
+                    <div className="w-18 sm:w-28 md:w-36 lg:w-44 transition-transform hover:-translate-y-2 cursor-pointer drop-shadow-xl" onClick={() => handleCategoryClick('laptops')}>
+                      <div className="relative bg-slate-900 rounded-t-md p-1 border border-slate-700 aspect-[16/10] overflow-hidden flex flex-col justify-between">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-600 mx-auto" />
+                        <div className="absolute inset-1.5 bg-gradient-to-br from-sky-900 via-blue-950 to-slate-950 rounded flex items-center justify-center">
+                          <span className="text-[7px] sm:text-[10px] font-black tracking-widest text-sky-400">DELL</span>
+                        </div>
+                      </div>
+                      <div className="h-1.5 sm:h-2 bg-gradient-to-b from-slate-600 to-slate-900 rounded-b-md shadow-md" />
+                    </div>
+                  </div>
+
+                  {/* Right 3 Laptops (Acer, ASUS, Dell) */}
+                  <div className="flex items-end -space-x-4 sm:-space-x-6 md:-space-x-8">
+                    {/* Laptop 4: ASUS */}
+                    <div className="w-18 sm:w-28 md:w-36 lg:w-44 transition-transform hover:-translate-y-2 cursor-pointer drop-shadow-xl" onClick={() => handleCategoryClick('laptops')}>
+                      <div className="relative bg-slate-900 rounded-t-md p-1 border border-slate-700 aspect-[16/10] overflow-hidden flex flex-col justify-between">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-600 mx-auto" />
+                        <div className="absolute inset-1.5 bg-gradient-to-br from-indigo-950 via-slate-900 to-blue-900 rounded flex items-center justify-center">
+                          <span className="text-[7px] sm:text-[10px] font-black tracking-wider text-slate-200">ASUS</span>
+                        </div>
+                      </div>
+                      <div className="h-1.5 sm:h-2 bg-gradient-to-b from-slate-600 to-slate-900 rounded-b-md shadow-md" />
+                    </div>
+
+                    {/* Laptop 5: HP Pavilion (Right Center) */}
+                    <div className="w-20 sm:w-32 md:w-44 lg:w-52 transition-transform hover:-translate-y-2 cursor-pointer drop-shadow-2xl z-10" onClick={() => handleCategoryClick('laptops')}>
+                      <div className="relative bg-slate-900 rounded-t-md p-1.5 border border-slate-600 aspect-[16/10] overflow-hidden flex flex-col justify-between">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-600 mx-auto" />
+                        <div className="absolute inset-1.5 bg-gradient-to-tr from-cyan-600 via-sky-600 to-blue-900 rounded flex flex-col items-center justify-center p-1">
+                          <div className="w-4 h-4 sm:w-6 sm:h-6 rounded-full border border-white/60 flex items-center justify-center text-white text-[8px] sm:text-[10px] font-serif italic font-bold">hp</div>
+                          <span className="text-[6px] sm:text-[8px] text-white/90 font-mono mt-0.5">Core i5 / i7</span>
+                        </div>
+                      </div>
+                      <div className="h-2 sm:h-2.5 bg-gradient-to-b from-slate-400 via-slate-600 to-slate-800 rounded-b-md shadow-lg" />
+                    </div>
+
+                    {/* Laptop 6: Acer */}
+                    <div className="w-16 sm:w-24 md:w-32 lg:w-40 transition-transform hover:-translate-y-2 cursor-pointer drop-shadow-xl" onClick={() => handleCategoryClick('laptops')}>
+                      <div className="relative bg-slate-900 rounded-t-md p-1 border border-slate-700 aspect-[16/10] overflow-hidden flex flex-col justify-between">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-600 mx-auto" />
+                        <div className="absolute inset-1.5 bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-950 rounded flex items-center justify-center">
+                          <span className="text-[7px] sm:text-[9px] font-bold text-emerald-400">acer</span>
+                        </div>
+                      </div>
+                      <div className="h-1.5 sm:h-2 bg-gradient-to-b from-slate-700 to-slate-900 rounded-b-md shadow-md" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* LOWER ROW OVERLAYS: Brand Badges + Checkmarks + Yellow Starburst + Enquiries Phone */}
+              <div className="relative z-20 grid grid-cols-12 items-end px-3 sm:px-6 md:px-8 pb-2 pt-1 gap-2">
+                {/* Left 5 Cols: Brand Logo Badges & Trust Icons */}
+                <div className="col-span-12 sm:col-span-5 space-y-1">
+                  {/* Brand Logos: Dell, HP, Lenovo, acer, ASUS */}
+                  <div className="flex items-center gap-1.5 sm:gap-2 bg-white/95 px-2.5 py-1 rounded-lg border border-slate-200/90 shadow-sm w-fit">
+                    <span className="w-5 h-5 rounded-full bg-[#0076ce] text-white text-[7px] font-black flex items-center justify-center">DELL</span>
+                    <span className="w-5 h-5 rounded-full bg-[#0096d6] text-white text-[8px] font-serif italic font-bold flex items-center justify-center">hp</span>
+                    <span className="bg-[#e2231a] text-white text-[7px] font-black px-1.5 py-0.5 rounded">Lenovo</span>
+                    <span className="text-[#83b817] font-bold text-[9px] lowercase">acer</span>
+                    <span className="text-slate-800 font-black text-[8px] tracking-wider">ASUS</span>
+                  </div>
+
+                  {/* 5 Trust Circular Badges */}
+                  <div className="flex items-center gap-1 sm:gap-2 text-[8px] sm:text-[9px] text-slate-800 font-bold">
+                    <div className="flex items-center gap-1">
+                      <span className="w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[8px]">⚙</span>
+                      <span className="hidden md:inline">Refurbished</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center text-[8px]">🛡</span>
+                      <span className="hidden md:inline">Tested</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-4 h-4 rounded-full bg-sky-500 text-white flex items-center justify-center text-[8px]">✓</span>
+                      <span className="hidden md:inline">A+ Grade</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-4 h-4 rounded-full bg-amber-500 text-white flex items-center justify-center text-[8px]">₹</span>
+                      <span className="hidden md:inline">Budget</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-4 h-4 rounded-full bg-purple-500 text-white flex items-center justify-center text-[8px]">★</span>
+                      <span className="hidden md:inline">Warranty</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right 7 Cols (Inside Blue Wave): Silver Dell Laptop + Checkmarks + Yellow Badge + Orders Phone */}
+                <div className="col-span-12 sm:col-span-7 flex items-center justify-end gap-2 sm:gap-4 text-white">
+                  {/* Checklist: Students, WFH, Office */}
+                  <div className="hidden lg:flex flex-col gap-0.5 text-[10px] font-semibold text-sky-100">
+                    <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-400 text-slate-900 flex items-center justify-center text-[8px] font-bold">✓</span><span>Ideal for Students</span></div>
+                    <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-400 text-slate-900 flex items-center justify-center text-[8px] font-bold">✓</span><span>Work from Home</span></div>
+                    <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-400 text-slate-900 flex items-center justify-center text-[8px] font-bold">✓</span><span>Office Usage</span></div>
+                    <div className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-400 text-slate-900 flex items-center justify-center text-[8px] font-bold">✓</span><span>Business Needs</span></div>
+                  </div>
+
+                  {/* Yellow Starburst Badge: 'Same Performance Less Price More Value!' */}
+                  <div className="relative bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-400 text-red-900 px-2 sm:px-3 py-1.5 rounded-xl font-black text-center shadow-lg border-2 border-yellow-200 rotate-[-2deg] hidden sm:block">
+                    <div className="text-[9px] sm:text-[10px] uppercase tracking-tight leading-tight">Same Performance</div>
+                    <div className="text-[11px] sm:text-xs text-red-700">Less Price</div>
+                    <div className="text-[10px] sm:text-[11px] font-extrabold text-slate-900">More Value!</div>
+                  </div>
+
+                  {/* Enquiries & Orders Callout */}
+                  <div className="text-right">
+                    <div className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-sky-200">Enquiries &amp; Orders</div>
+                    <a href="tel:8951219206" className="text-sm sm:text-lg md:text-xl font-black text-yellow-300 hover:text-yellow-200 tracking-tight block">
+                      8951219206, 821766626
+                    </a>
+                  </div>
+
+                  {/* QR Box: VISIT WEBSITE */}
+                  <div className="hidden md:flex flex-col items-center bg-white p-1 rounded-md text-slate-900 shadow-md">
+                    <div className="w-7 h-7 sm:w-9 sm:h-9 bg-slate-900 text-white rounded flex items-center justify-center font-mono text-[9px] font-bold">
+                      QR
+                    </div>
+                    <span className="text-[6px] font-extrabold uppercase mt-0.5 tracking-tighter">VISIT</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* BOTTOM STRIP: Exact Call, Email, Web, Categories */}
+              <div className="relative z-30 grid grid-cols-1 md:grid-cols-12 text-white font-medium text-xs leading-none">
                 {/* Left Blue Strip: Call, Email, Web */}
                 <div className="col-span-12 md:col-span-7 bg-[#004099] px-4 sm:px-8 py-2.5 flex flex-wrap items-center gap-3 sm:gap-6">
                   <a

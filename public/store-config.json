@@ -1,6 +1,22 @@
 {
-  "version": 1,
-  "publishedAt": "2026-09-28T18:28:00.000Z",
-  "publishedTimestamp": 1790648880000,
-  "note": "Default store configuration baseline for visitors and GitHub Pages deployment."
+  "version": 2,
+  "publishedAt": "2026-09-30T08:30:00.000Z",
+  "publishedTimestamp": 1790757000000,
+  "note": "Production store configuration for all visitors on icarecomputers.in",
+  "storeInfo": {
+    "name": "iCare Computers",
+    "tagline": "Your Trusted IT Partner for a Smarter Tomorrow",
+    "phone": "8217676626",
+    "email": "icarecomputers@gmail.com",
+    "address": "#Opp Kumaraswamy Temple, Beside UCO Bank, Ballari, Karnataka 583104",
+    "website": "www.icarecomputers.in"
+  },
+  "paymentConfig": {
+    "upiId": "8217676626@ybl",
+    "payeeName": "iCare Computers (Naga Reddy)",
+    "accountNumber": "03210200001234",
+    "ifscCode": "UCBA0000321",
+    "bankName": "UCO Bank, Ballari Branch",
+    "instructions": "Scan with Google Pay, PhonePe, Paytm, BHIM, or any UPI App."
+  }
 }
