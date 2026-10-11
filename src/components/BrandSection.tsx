@@ -33,7 +33,7 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
     if (onSelectBrand) {
       onSelectBrand(brandName);
     } else {
-      const el = document.getElementById('catalog');
+      const el = document.getElementById('offline-store') || document.getElementById('services');
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
@@ -55,15 +55,15 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-600 mb-1.5">
-              <span>Official Authorized Spares &amp; Retail</span>
+              <span>Multi-Brand Sales &amp; Certified Service</span>
               <span>·</span>
-              <span>Ballari Distribution</span>
+              <span>Ballari Showroom</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 font-heading">
-              World-Class Technology Brands Handled
+              All Major Technology Brands Handled
             </h2>
             <p className="text-slate-600 text-sm mt-1">
-              We supply 100% genuine components, factory seals, and official manufacturer warranty for all international computer, printing, and security brands.
+              We provide offline store sales and authorized chip-level service for all international laptop, desktop, printer, and CCTV surveillance brands. 100% genuine hardware with official manufacturer bill &amp; warranty.
             </p>
           </div>
 

@@ -1,6 +1,6 @@
 {
   "name": "iCare Computers - Sales, Service & IT Solutions",
-  "description": "Local computer shop in Ballari offering laptops, desktops, printers, CCTV surveillance, online ordering, repair services, gallery, and live customer support.",
+  "description": "Ballari physical tech showroom offering offline store sales and certified service for all brands of laptops, desktops, printers, CCTV cameras, accessories, and chip-level motherboard lab by Naga Reddy.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

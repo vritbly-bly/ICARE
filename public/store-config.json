@@ -1,22 +1,15 @@
 {
-  "version": 2,
-  "publishedAt": "2026-09-30T08:30:00.000Z",
-  "publishedTimestamp": 1790757000000,
-  "note": "Production store configuration for all visitors on icarecomputers.in",
+  "version": 3,
+  "publishedAt": "2026-10-10T20:00:00.000Z",
+  "publishedTimestamp": 1791657600000,
+  "note": "Official business portfolio and offline store sales & service information site for iCare Computers Ballari (No online store)",
   "storeInfo": {
     "name": "iCare Computers",
     "tagline": "Your Trusted IT Partner for a Smarter Tomorrow",
+    "proprietor": "Naga Reddy",
     "phone": "8217676626",
     "email": "icarecomputers@gmail.com",
     "address": "#Opp Kumaraswamy Temple, Beside UCO Bank, Ballari, Karnataka 583104",
     "website": "www.icarecomputers.in"
-  },
-  "paymentConfig": {
-    "upiId": "8217676626@ybl",
-    "payeeName": "iCare Computers (Naga Reddy)",
-    "accountNumber": "03210200001234",
-    "ifscCode": "UCBA0000321",
-    "bankName": "UCO Bank, Ballari Branch",
-    "instructions": "Scan with Google Pay, PhonePe, Paytm, BHIM, or any UPI App."
   }
 }

@@ -1,44 +1,48 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Phone, MapPin, Menu, X, Search, QrCode, Upload, ShieldCheck, Lock, BarChart3, CloudUpload } from 'lucide-react';
+import { 
+  Phone, 
+  MapPin, 
+  Menu, 
+  X, 
+  Search, 
+  Upload, 
+  ShieldCheck, 
+  Lock, 
+  MessageSquare,
+  Clock
+} from 'lucide-react';
 import { STORE_INFO } from '../data/mockData';
 import { BrandLogo } from './BrandLogo';
 import { useAdmin } from '../context/AdminContext';
 
 interface HeaderProps {
-  cartCount: number;
-  onOpenCart: () => void;
   activeSection: string;
   onNavigate: (section: string) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  matchingCount?: number;
-  onOpenPaymentQr?: () => void;
   onOpenEditLogoModal?: (tab?: 'store' | 'brands') => void;
   onOpenDashboard?: () => void;
   onOpenPublishSync?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  cartCount,
-  onOpenCart,
   activeSection,
   onNavigate,
   searchQuery,
   onSearchChange,
-  matchingCount,
-  onOpenPaymentQr,
   onOpenEditLogoModal,
-  onOpenDashboard,
-  onOpenPublishSync,
 }) => {
   const { isAdmin, openLoginModal } = useAdmin();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { id: 'catalog', label: 'Products & Ordering' },
-    { id: 'services', label: 'Services & Upgrades' },
-    { id: 'brands', label: 'Brands' },
-    { id: 'contact', label: 'Find Us' },
+    { id: 'offline-store', label: 'Store Sales & Service' },
+    { id: 'about', label: 'About Us' },
+    { id: 'services', label: 'Services & Scope' },
+    { id: 'portfolio', label: 'Case Studies' },
+    { id: 'lab', label: 'Technical Lab' },
+    { id: 'brands', label: 'All Brands' },
+    { id: 'contact', label: 'Store Location' },
   ];
 
   const handleNavClick = (id: string) => {
@@ -48,8 +52,8 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleSearchInput = (val: string) => {
     onSearchChange(val);
-    if (val.trim().length > 0 && activeSection !== 'catalog') {
-      onNavigate('catalog');
+    if (val.trim().length > 0 && activeSection !== 'offline-store' && activeSection !== 'services') {
+      onNavigate('offline-store');
     }
   };
 
@@ -64,10 +68,13 @@ export const Header: React.FC<HeaderProps> = ({
               <span>#Opp Kumaraswamy Temple, Beside UCO Bank, Ballari - 583104</span>
             </span>
             <span className="text-slate-500">·</span>
-            <span className="text-emerald-400 font-medium">Free Doorstep Delivery in Ballari on orders &gt; ₹2,000</span>
+            <span className="text-orange-300 font-bold">🏬 Offline Store Sales &amp; Multi-Brand Service · No Online Checkout</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-slate-400">Mon-Sat: 9:30 AM – 9:00 PM</span>
+            <span className="text-slate-400 flex items-center gap-1">
+              <Clock className="w-3 h-3 text-slate-500" />
+              <span>Mon-Sat: 9:30 AM – 9:00 PM</span>
+            </span>
             <span className="text-slate-500">·</span>
             <a
               href={`tel:${STORE_INFO.phone}`}
@@ -102,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-        {/* Zone 1: Brand Wordmark & Emblem with Edit Option */}
+        {/* Zone 1: Brand Wordmark & Emblem */}
         <div className="flex items-center gap-1 shrink-0">
           <button
             onClick={() => handleNavClick('hero')}
@@ -124,41 +131,29 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
 
-        {/* Global Live Search Bar */}
-        <div className="hidden sm:flex flex-1 max-w-sm lg:max-w-md mx-2 relative">
+        {/* Global Capability Search Bar */}
+        <div className="hidden sm:flex flex-1 max-w-xs lg:max-w-sm mx-2 relative">
           <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search products, laptops, printers, CCTV..."
+            placeholder="Search in-store stock, laptops, CCTV, printer toners, lab..."
             value={searchQuery}
             onChange={(e) => handleSearchInput(e.target.value)}
-            onFocus={() => {
-              if (searchQuery.trim().length > 0 && activeSection !== 'catalog') {
-                onNavigate('catalog');
-              }
-            }}
-            className="w-full pl-8 pr-16 py-1.5 text-xs bg-slate-100 hover:bg-slate-50 focus:bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all shadow-2xs"
+            className="w-full pl-8 pr-8 py-1.5 text-xs bg-slate-100 hover:bg-slate-50 focus:bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all shadow-2xs"
           />
           {searchQuery && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-              {matchingCount !== undefined && (
-                <span className="text-[10px] font-semibold text-slate-400 bg-slate-200/70 px-1.5 py-0.5 rounded">
-                  {matchingCount} found
-                </span>
-              )}
-              <button
-                onClick={() => onSearchChange('')}
-                className="text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
-                title="Clear Search"
-              >
-                <X className="w-3 h-3" />
-              </button>
-            </div>
+            <button
+              onClick={() => onSearchChange('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+              title="Clear Search"
+            >
+              <X className="w-3 h-3" />
+            </button>
           )}
         </div>
 
-        {/* Zone 2: Navigation Links (Clean text with hover states) */}
-        <nav className="hidden xl:flex items-center gap-6 text-xs font-semibold text-slate-600 shrink-0">
+        {/* Zone 2: Navigation Links */}
+        <nav className="hidden xl:flex items-center gap-5 text-xs font-semibold text-slate-600 shrink-0">
           {navLinks.map((link) => (
             <button
               key={link.id}
@@ -174,95 +169,26 @@ export const Header: React.FC<HeaderProps> = ({
           ))}
         </nav>
 
-        {/* Zone 3: Primary Actions */}
+        {/* Zone 3: Direct Inquiries Actions */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-          {/* Admin 1-Click Sync to Visitor Site Button */}
-          {isAdmin && onOpenPublishSync && (
-            <button
-              onClick={onOpenPublishSync}
-              aria-label="Publish All Changes to Visitor Site"
-              title="Publish all hardware catalog, logo, and web banner updates directly to the live visitor site"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-xl transition-all cursor-pointer shadow-xs border border-emerald-400/40"
-            >
-              <CloudUpload className="w-4 h-4" />
-              <span>Sync to Visitor Site</span>
-            </button>
-          )}
-
-          {/* Admin Dashboard Button */}
-          {isAdmin && onOpenDashboard && (
-            <button
-              onClick={onOpenDashboard}
-              aria-label="Open Inventory Analytics Dashboard"
-              title="Open Inventory Analytics Dashboard"
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-500 rounded-xl transition-all cursor-pointer shadow-xs"
-            >
-              <BarChart3 className="w-4 h-4" />
-              <span className="hidden md:inline">Dashboard</span>
-            </button>
-          )}
-
-          {/* Payment QR Button */}
-          {onOpenPaymentQr && (
-            <button
-              onClick={onOpenPaymentQr}
-              aria-label="Payment QR Code"
-              title="Store Payment QR Code"
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-sky-50 hover:bg-sky-100 border border-sky-200/80 rounded-xl transition-all cursor-pointer shadow-2xs"
-            >
-              <QrCode className="w-4 h-4 text-sky-600" />
-              <span className="hidden sm:inline">Payment QR</span>
-            </button>
-          )}
-
-          {/* Admin Portal Button */}
-          <button
-            onClick={openLoginModal}
-            aria-label={isAdmin ? 'Admin Portal Active' : 'Store Admin Login'}
-            title={isAdmin ? 'Admin Mode (Active) - Click to manage' : 'Store Owner / Admin Login'}
-            className={`flex items-center gap-1 px-2.5 py-2 rounded-xl transition-all cursor-pointer text-xs font-semibold ${
-              isAdmin
-                ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80'
-            }`}
+          {/* WhatsApp Direct Action */}
+          <a
+            href={STORE_INFO.whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-all shadow-2xs"
           >
-            {isAdmin ? (
-              <>
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span className="hidden sm:inline text-[11px] font-bold">Admin</span>
-              </>
-            ) : (
-              <>
-                <Lock className="w-3.5 h-3.5 text-slate-500" />
-                <span className="hidden sm:inline text-[11px]">Admin</span>
-              </>
-            )}
-          </button>
+            <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="hidden lg:inline">WhatsApp</span>
+          </a>
 
-          {/* Cart Button */}
-          <button
-            onClick={onOpenCart}
-            aria-label="Open Shopping Cart"
-            className="relative flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition-all cursor-pointer"
-          >
-            <ShoppingBag className="w-4 h-4 text-sky-600" />
-            <span className="hidden md:inline">Order Bag</span>
-            {cartCount > 0 ? (
-              <span className="inline-flex items-center justify-center min-w-[18px] h-4.5 px-1 text-[11px] font-bold text-white bg-orange-500 rounded-full tabular-nums">
-                {cartCount}
-              </span>
-            ) : (
-              <span className="text-[11px] text-slate-500 tabular-nums">0</span>
-            )}
-          </button>
-
-          {/* Quick Call Action */}
+          {/* Quick Call Naga Reddy Action */}
           <a
             href={`tel:${STORE_INFO.phone}`}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-sm shadow-sky-600/20 whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-700 active:bg-sky-800 rounded-xl transition-all shadow-sm shadow-sky-600/20 whitespace-nowrap"
           >
             <Phone className="w-3.5 h-3.5" />
-            <span>Call Shop</span>
+            <span>Call Naga Reddy</span>
           </a>
 
           {/* Mobile Menu Toggle */}
@@ -273,28 +199,6 @@ export const Header: React.FC<HeaderProps> = ({
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-        </div>
-      </div>
-
-      {/* Mobile Search Bar (Directly below bar on mobile screens) */}
-      <div className="sm:hidden px-4 pb-2.5 pt-0.5">
-        <div className="relative">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search products by name or category..."
-            value={searchQuery}
-            onChange={(e) => handleSearchInput(e.target.value)}
-            className="w-full pl-8 pr-8 py-2 text-xs bg-slate-100 focus:bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          )}
         </div>
       </div>
 
@@ -318,54 +222,26 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="pt-3 border-t border-slate-100 space-y-2">
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                openLoginModal();
-              }}
-              className={`flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-bold rounded-xl text-center cursor-pointer border ${
-                isAdmin
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                  : 'bg-slate-100 text-slate-700 border-slate-200'
-              }`}
-            >
-              {isAdmin ? (
-                <>
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>Admin Mode Active (Tap to manage)</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-4 h-4 text-slate-500" />
-                  <span>Store Owner / Admin Login</span>
-                </>
-              )}
-            </button>
-
-            {onOpenPaymentQr && (
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenPaymentQr();
-                }}
-                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-bold text-sky-700 bg-sky-50 border border-sky-200 rounded-xl text-center cursor-pointer"
-              >
-                <QrCode className="w-4 h-4 text-sky-600" />
-                <span>Store Payment QR Code</span>
-              </button>
-            )}
-
             <a
               href={`tel:${STORE_INFO.phone}`}
               className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-bold text-white bg-sky-600 rounded-xl text-center"
             >
               <Phone className="w-4 h-4" />
-              <span>Call Naga Reddy ({STORE_INFO.phone})</span>
+              <span>Call Naga Reddy ({STORE_INFO.formattedPhone})</span>
             </a>
-            <p className="text-[11px] text-center text-slate-500">
-              #Opp Kumaraswamy Temple, Beside UCO Bank, Ballari
+
+            <a
+              href={STORE_INFO.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl text-center"
+            >
+              <MessageSquare className="w-4 h-4 text-emerald-600" />
+              <span>Chat on WhatsApp</span>
+            </a>
+
+            <p className="text-[11px] text-center text-slate-500 pt-1">
+              #Opp Kumaraswamy Temple, Beside UCO Bank, Ballari - 583104
             </p>
           </div>
         </div>
