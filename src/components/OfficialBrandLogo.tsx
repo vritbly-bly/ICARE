@@ -505,6 +505,38 @@ export const OfficialBrandLogo: React.FC<OfficialBrandLogoProps> = ({
         </svg>
       );
 
+    case 'trueview':
+      return (
+        <svg
+          viewBox="0 0 160 36"
+          className={`${heightClass} ${className} shrink-0`}
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label="Trueview Official Logo"
+        >
+          {/* Circular Emblem with stylized T */}
+          <g transform="translate(4, 4)">
+            <circle cx="14" cy="14" r="13" stroke="#231F20" strokeWidth="2.5" fill="none" />
+            <path d="M 8 9 L 20 9 M 14 9 L 14 20" stroke="#ED1C24" strokeWidth="3" strokeLinecap="round" />
+          </g>
+          <text
+            x="36"
+            y="26"
+            fill="#ED1C24"
+            fontFamily="'Arial', sans-serif"
+            fontWeight="900"
+            fontSize="21"
+            fontStyle="italic"
+            letterSpacing="-0.5"
+          >
+            Trueview
+          </text>
+          <circle cx="134" cy="12" r="2.5" stroke="#ED1C24" strokeWidth="0.8" fill="none" />
+          <text x="132.8" y="13.2" fill="#ED1C24" fontSize="3" fontWeight="bold">R</text>
+        </svg>
+      );
+
     case 'dahua':
       return (
         <svg

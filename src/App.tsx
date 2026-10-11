@@ -11,6 +11,7 @@ import { CustomerSupportChat } from './components/CustomerSupportChat';
 import { Footer } from './components/Footer';
 import { AddServiceModal } from './components/AddServiceModal';
 import { OfflineStoreShowcase } from './components/OfflineStoreShowcase';
+import { HeroPosterBanner } from './components/HeroPosterBanner';
 import { FadeInSection } from './components/FadeInSection';
 import { EditLogoModal } from './components/EditLogoModal';
 import { AdminBar } from './components/AdminBar';
@@ -137,7 +138,7 @@ export default function App() {
 
   // IntersectionObserver ScrollSpy to automatically highlight active section in Header on scroll
   useEffect(() => {
-    const sectionIds = ['hero', 'offline-store', 'about', 'services', 'portfolio', 'lab', 'brands', 'contact'];
+    const sectionIds = ['hero-banner', 'hero', 'offline-store', 'about', 'services', 'portfolio', 'lab', 'brands', 'contact'];
     const sectionElements = sectionIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -398,6 +399,15 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1">
+        {/* Official Hero Poster Banner Page (All Laptops, Printers, CCTV & Brand Logos from final 3.png) */}
+        <HeroPosterBanner
+          onNavigateToSection={scrollToSection}
+          onSelectBrand={(brandName) => {
+            setSearchQuery(brandName);
+            scrollToSection('offline-store');
+          }}
+        />
+
         {/* Hero Section with Enterprise Profile & Quick Actions */}
         <FadeInSection direction="up" duration={750} threshold={0.05} delay={30}>
           <Hero
