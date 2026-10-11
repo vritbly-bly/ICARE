@@ -10,7 +10,6 @@ import { ContactSection } from './components/ContactSection';
 import { CustomerSupportChat } from './components/CustomerSupportChat';
 import { Footer } from './components/Footer';
 import { AddServiceModal } from './components/AddServiceModal';
-import { HeaderBanner } from './components/HeaderBanner';
 import { OfflineStoreShowcase } from './components/OfflineStoreShowcase';
 import { FadeInSection } from './components/FadeInSection';
 import { EditLogoModal } from './components/EditLogoModal';
@@ -399,13 +398,6 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {/* Official iCare Header Banner */}
-        <HeaderBanner
-          onSelectCategory={handleCategorySelect}
-          onExploreCatalog={() => scrollToSection('offline-store')}
-          onOpenPublishSync={handleOpenPublishSync}
-        />
-
         {/* Hero Section with Enterprise Profile & Quick Actions */}
         <FadeInSection direction="up" duration={750} threshold={0.05} delay={30}>
           <Hero
