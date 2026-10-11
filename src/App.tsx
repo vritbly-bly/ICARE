@@ -15,6 +15,7 @@ import { AddProductModal } from './components/AddProductModal';
 import { AddServiceModal } from './components/AddServiceModal';
 import { PaymentQrModal } from './components/PaymentQrModal';
 import { HeaderBanner } from './components/HeaderBanner';
+import { FadeInSection } from './components/FadeInSection';
 import { EditLogoModal } from './components/EditLogoModal';
 import { AdminBar } from './components/AdminBar';
 import { AdminLoginModal } from './components/AdminLoginModal';
@@ -211,6 +212,34 @@ export default function App() {
       window.removeEventListener('icare_live_sync_completed', handleLiveSyncEvent);
       window.removeEventListener('storage', handleStorageChange);
     };
+  }, []);
+
+  // IntersectionObserver ScrollSpy to automatically highlight active section in Header on scroll
+  useEffect(() => {
+    const sectionIds = ['hero', 'catalog', 'services', 'brands', 'contact'];
+    const sectionElements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (sectionElements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        rootMargin: '-20% 0px -55% 0px',
+        threshold: 0,
+      }
+    );
+
+    sectionElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   const handleOpenEditLogoModal = (
@@ -735,47 +764,57 @@ export default function App() {
         />
 
         {/* Hero Section with Clean Header & Quick Actions */}
-        <Hero
-          onExploreCatalog={() => scrollToSection('catalog')}
-          onBookService={() => scrollToSection('services')}
-          onSelectCategory={handleCategorySelect}
-        />
+        <FadeInSection direction="up" duration={750} threshold={0.05} delay={30}>
+          <Hero
+            onExploreCatalog={() => scrollToSection('catalog')}
+            onBookService={() => scrollToSection('services')}
+            onSelectCategory={handleCategorySelect}
+          />
+        </FadeInSection>
 
         {/* Product Catalog & Online Ordering System (With Live Search, Add/Edit/Delete) */}
-        <ProductCatalog
-          products={products}
-          onAddToCart={handleAddToCart}
-          onOpenQuickView={(product) => setActiveQuickViewProduct(product)}
-          selectedCategory={selectedCategory}
-          onSelectCategory={(cat) => setSelectedCategory(cat)}
-          onOpenAddProduct={handleOpenAddProduct}
-          onEditProduct={handleEditProduct}
-          onDeleteProduct={handleDeleteProduct}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          onOpenPublishSync={handleOpenPublishSync}
-        />
+        <FadeInSection direction="up" duration={750} threshold={0.06} delay={30}>
+          <ProductCatalog
+            products={products}
+            onAddToCart={handleAddToCart}
+            onOpenQuickView={(product) => setActiveQuickViewProduct(product)}
+            selectedCategory={selectedCategory}
+            onSelectCategory={(cat) => setSelectedCategory(cat)}
+            onOpenAddProduct={handleOpenAddProduct}
+            onEditProduct={handleEditProduct}
+            onDeleteProduct={handleDeleteProduct}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            onOpenPublishSync={handleOpenPublishSync}
+          />
+        </FadeInSection>
 
         {/* 6 Core IT Pillars & Interactive Repair Cost Estimator (With Add/Edit/Delete) */}
-        <ServicesSection 
-          services={services}
-          onOpenSupportWithTopic={handleOpenSupportWithTopic}
-          onOpenAddService={handleOpenAddService}
-          onEditService={handleEditService}
-          onDeleteService={handleDeleteService}
-        />
+        <FadeInSection direction="up" duration={750} threshold={0.06} delay={30}>
+          <ServicesSection 
+            services={services}
+            onOpenSupportWithTopic={handleOpenSupportWithTopic}
+            onOpenAddService={handleOpenAddService}
+            onEditService={handleEditService}
+            onDeleteService={handleDeleteService}
+          />
+        </FadeInSection>
 
         {/* Authorized Brands Ecosystem & Testimonials */}
-        <BrandSection
-          onSelectBrand={(brandName) => {
-            setSearchQuery(brandName);
-            scrollToSection('catalog');
-          }}
-          onOpenEditLogoModal={handleOpenEditLogoModal}
-        />
+        <FadeInSection direction="up" duration={750} threshold={0.06} delay={30}>
+          <BrandSection
+            onSelectBrand={(brandName) => {
+              setSearchQuery(brandName);
+              scrollToSection('catalog');
+            }}
+            onOpenEditLogoModal={handleOpenEditLogoModal}
+          />
+        </FadeInSection>
 
         {/* Store Location, Map Reference & Direct Callback Form */}
-        <ContactSection />
+        <FadeInSection direction="up" duration={750} threshold={0.06} delay={30}>
+          <ContactSection />
+        </FadeInSection>
       </main>
 
       {/* Footer */}

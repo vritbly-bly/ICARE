@@ -27,7 +27,7 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-14 bg-white border-t border-slate-200">
+    <section id="contact" className="py-14 bg-white border-t border-slate-200 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Store Details & Google Map Pin */}

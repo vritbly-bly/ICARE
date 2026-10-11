@@ -49,7 +49,7 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
   };
 
   return (
-    <section id="brands" className="py-14 bg-slate-50 border-b border-slate-200">
+    <section id="brands" className="py-14 bg-slate-50 border-b border-slate-200 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header with "Add Brand" and "Manage Logos" Actions */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">

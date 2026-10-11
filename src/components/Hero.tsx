@@ -14,7 +14,7 @@ export const Hero: React.FC<HeroProps> = ({
   onSelectCategory,
 }) => {
   return (
-    <div className="relative bg-gradient-to-b from-sky-900 via-slate-900 to-slate-950 text-white overflow-hidden">
+    <div id="hero" className="relative bg-gradient-to-b from-sky-900 via-slate-900 to-slate-950 text-white overflow-hidden scroll-mt-20">
       {/* Decorative Grid & Glow Elements */}
       <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-15 pointer-events-none" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-sky-500/20 blur-[130px] rounded-full pointer-events-none" />
