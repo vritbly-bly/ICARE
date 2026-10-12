@@ -112,7 +112,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Zone 1: Brand Wordmark & Emblem */}
         <div className="flex items-center gap-1 shrink-0">
           <button
-            onClick={() => handleNavClick('hero-banner')}
+            onClick={() => handleNavClick('hero')}
             className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded-lg p-1 -m-1 shrink-0"
             aria-label="iCare Computers Home"
           >

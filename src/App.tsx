@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
-import { Hero } from './components/Hero';
 import { AboutSection } from './components/AboutSection';
 import { ServicesSection } from './components/ServicesSection';
 import { ProjectsPortfolio } from './components/ProjectsPortfolio';
@@ -11,7 +10,6 @@ import { CustomerSupportChat } from './components/CustomerSupportChat';
 import { Footer } from './components/Footer';
 import { AddServiceModal } from './components/AddServiceModal';
 import { OfflineStoreShowcase } from './components/OfflineStoreShowcase';
-import { HeroPosterBanner } from './components/HeroPosterBanner';
 import { FadeInSection } from './components/FadeInSection';
 import { EditLogoModal } from './components/EditLogoModal';
 import { AdminBar } from './components/AdminBar';
@@ -138,7 +136,7 @@ export default function App() {
 
   // IntersectionObserver ScrollSpy to automatically highlight active section in Header on scroll
   useEffect(() => {
-    const sectionIds = ['hero-banner', 'hero', 'offline-store', 'about', 'services', 'portfolio', 'lab', 'brands', 'contact'];
+    const sectionIds = ['offline-store', 'about', 'services', 'portfolio', 'lab', 'brands', 'contact'];
     const sectionElements = sectionIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -342,7 +340,7 @@ export default function App() {
   // Navigation Scrolling
   const scrollToSection = (sectionId: string) => {
     setActiveSection(sectionId);
-    if (sectionId === 'hero') {
+    if (sectionId === 'hero' || sectionId === 'offline-store') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -399,26 +397,6 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {/* Official Hero Poster Banner Page (All Laptops, Printers, CCTV & Brand Logos from final 3.png) */}
-        <HeroPosterBanner
-          onNavigateToSection={scrollToSection}
-          onSelectBrand={(brandName) => {
-            setSearchQuery(brandName);
-            scrollToSection('offline-store');
-          }}
-        />
-
-        {/* Hero Section with Enterprise Profile & Quick Actions */}
-        <FadeInSection direction="up" duration={750} threshold={0.05} delay={30}>
-          <Hero
-            onExploreStoreSales={() => scrollToSection('offline-store')}
-            onExplorePortfolio={() => scrollToSection('portfolio')}
-            onExploreServices={() => scrollToSection('services')}
-            onContactClick={() => scrollToSection('contact')}
-            onSelectCategory={handleCategorySelect}
-          />
-        </FadeInSection>
-
         {/* Offline Store Sales & Multi-Brand Service Hub (Not an Online Store) */}
         <FadeInSection direction="up" duration={750} threshold={0.05} delay={30}>
           <OfflineStoreShowcase />

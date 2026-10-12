@@ -44,7 +44,8 @@ export const HeroPosterBanner: React.FC<HeroPosterBannerProps> = ({
   };
 
   return (
-    <section id="hero-banner" className="relative w-full bg-slate-100/80 py-4 sm:py-6 px-2 sm:px-4 lg:px-6">
+    <section id="hero" className="relative w-full bg-slate-100/80 py-4 sm:py-6 px-2 sm:px-4 lg:px-6 scroll-mt-20">
+      <div id="hero-banner" className="absolute -top-20" />
       <div className="max-w-5xl mx-auto">
         
         {/* MAIN POSTER CONTAINER (Matching final 3.png exactly) */}
@@ -60,9 +61,14 @@ export const HeroPosterBanner: React.FC<HeroPosterBannerProps> = ({
           {/* ======================================================== */}
           <div className="relative z-10 pt-4 sm:pt-6 px-4 sm:px-8 flex flex-col items-center">
             
-            {/* Top Row: Slogan on right side */}
-            <div className="w-full flex items-center justify-between min-h-[40px]">
-              <div className="w-12 sm:w-20" /> {/* Spacer for top-left wave */}
+            {/* Top Row: Left store badge, Right Slogan */}
+            <div className="w-full flex items-center justify-between min-h-[44px]">
+              <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-sky-300/80 shadow-xs text-xs font-bold text-sky-950 backdrop-blur-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>OFFLINE STORE SALES &amp; SERVICE</span>
+                <span className="text-orange-500 font-extrabold">· BALLARI</span>
+              </div>
+              <div className="sm:hidden w-8" />
               
               {/* Top Right Signature Script: "Your Trusted Tech Partner!" */}
               <div 
@@ -78,9 +84,9 @@ export const HeroPosterBanner: React.FC<HeroPosterBannerProps> = ({
               </div>
             </div>
 
-            {/* Central Official Logo: Laptop in hand + "icare COMPUTERS" */}
-            <div className="mt-1 sm:mt-2 flex flex-col items-center justify-center text-center">
-              <div className="transform scale-95 sm:scale-105 lg:scale-110 origin-center">
+            {/* Central Official Logo: Laptop in hand + "I care COMPUTERS" */}
+            <div className="mt-2 sm:mt-3 flex flex-col items-center justify-center text-center">
+              <div className="transform scale-100 sm:scale-105 lg:scale-110 origin-center">
                 <BrandLogo variant="full" size="xl" />
               </div>
             </div>
