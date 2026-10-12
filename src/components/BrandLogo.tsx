@@ -21,7 +21,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     if (customLogoUrl !== undefined) return customLogoUrl;
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('icare_custom_store_logo');
-      if (stored && stored.trim() !== '' && !stored.includes('logo.svg') && stored !== 'null') {
+      if (stored && stored.trim() !== '' && stored !== 'null') {
         return stored;
       }
     }
@@ -37,7 +37,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     const handleUpdate = () => {
       if (typeof window !== 'undefined') {
         const stored = localStorage.getItem('icare_custom_store_logo');
-        if (stored && stored.trim() !== '' && !stored.includes('logo.svg') && stored !== 'null') {
+        if (stored && stored.trim() !== '' && stored !== 'null') {
           setActiveCustomLogo(stored);
         } else {
           setActiveCustomLogo(STORE_INFO.defaultLogoUrl || null);

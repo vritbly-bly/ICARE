@@ -168,10 +168,6 @@ export default function App() {
     brandName?: string, 
     category?: 'laptops' | 'printers' | 'cctv'
   ) => {
-    if (!isAdmin) {
-      openLoginModal();
-      return;
-    }
     setEditLogoModalTab(tab);
     setEditLogoBrandName(brandName);
     setEditLogoCategory(category);
@@ -405,6 +401,7 @@ export default function App() {
             setSearchQuery(brandName);
             scrollToSection('offline-store');
           }}
+          onOpenEditLogoModal={handleOpenEditLogoModal}
         />
 
         {/* Offline Store Sales & Multi-Brand Service Hub */}

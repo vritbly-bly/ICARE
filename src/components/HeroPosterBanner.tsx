@@ -12,7 +12,8 @@ import {
   ChevronRight,
   Shield,
   Layers,
-  Lock
+  Lock,
+  Upload
 } from 'lucide-react';
 import { STORE_INFO } from '../data/mockData';
 import { BrandLogo } from './BrandLogo';
@@ -21,11 +22,13 @@ import { OfficialBrandLogo } from './OfficialBrandLogo';
 interface HeroPosterBannerProps {
   onNavigateToSection?: (sectionId: string) => void;
   onSelectBrand?: (brandName: string) => void;
+  onOpenEditLogoModal?: (tab?: 'store' | 'brands') => void;
 }
 
 export const HeroPosterBanner: React.FC<HeroPosterBannerProps> = ({
   onNavigateToSection,
   onSelectBrand,
+  onOpenEditLogoModal,
 }) => {
   const [activeBrandModal, setActiveBrandModal] = useState<string | null>(null);
 
@@ -89,6 +92,18 @@ export const HeroPosterBanner: React.FC<HeroPosterBannerProps> = ({
               <div className="transform scale-100 sm:scale-105 lg:scale-110 origin-center">
                 <BrandLogo variant="full" size="xl" />
               </div>
+
+              {onOpenEditLogoModal && (
+                <button
+                  type="button"
+                  onClick={() => onOpenEditLogoModal('store')}
+                  className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 hover:bg-white text-slate-700 hover:text-sky-600 border border-slate-300 hover:border-sky-400 text-xs font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer backdrop-blur-xs group"
+                  title="Upload or change store logo"
+                >
+                  <Upload className="w-3.5 h-3.5 text-sky-500 group-hover:scale-110 transition-transform" />
+                  <span>Add / Change Logo</span>
+                </button>
+              )}
             </div>
 
             {/* Blue Ribbon Banner: SALES • SERVICE • CCTV & SECURITY */}

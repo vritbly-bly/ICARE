@@ -120,14 +120,15 @@ export const Header: React.FC<HeaderProps> = ({
             <BrandLogo variant="compact" size="md" />
           </button>
 
-          {isAdmin && onOpenEditLogoModal && (
+          {onOpenEditLogoModal && (
             <button
               onClick={() => onOpenEditLogoModal('store')}
-              className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
-              title="Upload or change logo (Admin)"
-              aria-label="Upload logo"
+              className="flex items-center gap-1 px-2 py-1 text-slate-500 hover:text-sky-600 hover:bg-sky-50 border border-slate-200/80 hover:border-sky-300 rounded-lg text-[11px] font-semibold transition-all cursor-pointer shadow-2xs ml-1"
+              title="Add or Change Store Logo (PNG, SVG, JPG)"
+              aria-label="Add or change store logo"
             >
-              <Upload className="w-3.5 h-3.5" />
+              <Upload className="w-3 h-3 text-sky-500" />
+              <span className="hidden md:inline">Add / Change Logo</span>
             </button>
           )}
         </div>
