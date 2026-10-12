@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
+import { HeroPosterBanner } from './components/HeroPosterBanner';
 import { AboutSection } from './components/AboutSection';
 import { ServicesSection } from './components/ServicesSection';
 import { ProjectsPortfolio } from './components/ProjectsPortfolio';
@@ -397,7 +398,16 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {/* Offline Store Sales & Multi-Brand Service Hub (Not an Online Store) */}
+        {/* Official Hero Poster Banner Page (All Laptops, Printers, CCTV & Brand Logos) */}
+        <HeroPosterBanner
+          onNavigateToSection={scrollToSection}
+          onSelectBrand={(brandName) => {
+            setSearchQuery(brandName);
+            scrollToSection('offline-store');
+          }}
+        />
+
+        {/* Offline Store Sales & Multi-Brand Service Hub */}
         <FadeInSection direction="up" duration={750} threshold={0.05} delay={30}>
           <OfflineStoreShowcase />
         </FadeInSection>

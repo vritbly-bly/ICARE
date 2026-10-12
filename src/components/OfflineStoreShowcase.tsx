@@ -299,72 +299,8 @@ export const OfflineStoreShowcase: React.FC = () => {
   };
 
   return (
-    <section id="offline-store" className="py-16 sm:py-20 bg-slate-100/70 border-b border-slate-200 scroll-mt-20">
+    <section id="offline-store" className="py-12 sm:py-16 bg-slate-100/70 border-b border-slate-200 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        
-        {/* BIG EXPLICIT NOTICE BANNER: OFFLINE STORE CLARIFICATION */}
-        <div className="mb-10 bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-lg relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
-            <div className="space-y-2 max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-500/20 border border-orange-400/40 rounded-lg text-xs font-bold text-orange-300">
-                <Store className="w-3.5 h-3.5 text-orange-400" />
-                <span>PHYSICAL OFFLINE STORE &amp; SERVICE COUNTER · BALLARI</span>
-                <span className="text-orange-400">·</span>
-                <span className="text-white">ALL BRANDS HANDLED</span>
-              </div>
-              
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight font-heading">
-                We Do Offline Store Sales &amp; Multi-Brand Service
-              </h2>
-              
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                <strong className="text-white">Important Notice:</strong> We are a physical offline technology retail store and chip-level service center. <span className="text-orange-300 font-semibold underline decoration-orange-400/50">We do not sell products through an online shopping cart on this website.</span> All purchases, live demos, device diagnostics, and repair services are provided directly at our physical store counter beside UCO Bank or via phone &amp; WhatsApp inquiries.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 shrink-0">
-              <a
-                href={`tel:${STORE_INFO.phone}`}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-orange-500/20 whitespace-nowrap"
-              >
-                <Phone className="w-4 h-4" />
-                <span>Call Store: {STORE_INFO.formattedPhone}</span>
-              </a>
-
-              <a
-                href={STORE_INFO.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-emerald-600/20 whitespace-nowrap"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>Inquire on WhatsApp</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Offline Store Quick Advantages Strip */}
-          <div className="mt-5 pt-4 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] text-slate-300">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>100% Genuine Tax Invoice</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>All Brands Under One Roof</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Live Demonstration in Store</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Same-Day Ballari Service</span>
-            </div>
-          </div>
-        </div>
 
         {/* DUAL MODE TAB SWITCHER: 1. OFFLINE STORE SALES vs 2. OFFLINE STORE SERVICE */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
